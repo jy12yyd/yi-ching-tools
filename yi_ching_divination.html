@@ -1,0 +1,2326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蹇杨的工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffd700;
+            margin-bottom: 30px;
+            font-size: 32px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: #ffd700;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            color: #1a1a2e;
+            border-color: #ffd700;
+            font-weight: bold;
+        }
+
+        .ziwei-input-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .ziwei-input-container h2 {
+            text-align: center;
+            color: #ffd700;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffd700;
+            font-size: 14px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .ziwei-result {
+            margin-top: 30px;
+        }
+
+        .ziwei-header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .ziwei-header h2 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .ziwei-header p {
+            color: #ccc;
+        }
+
+        .ziwei-palace h3,
+        .ziwei-stars h3,
+        .ziwei-analysis h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .palace-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .palace-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            text-align: center;
+        }
+
+        .palace-card .palace-name {
+            color: #ffd700;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+            padding-bottom: 5px;
+        }
+
+        .palace-card .palace-stars {
+            color: #fff;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .palace-card .palace-stars .star {
+            display: block;
+            margin: 2px 0;
+        }
+
+        .palace-card .palace-stars .zhang {
+            color: #ff6b6b;
+        }
+
+        .palace-card .palace-stars .hua {
+            color: #00ff88;
+        }
+
+        .stars-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .star-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .star-item .star-name {
+            color: #ffd700;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .star-item .star-location {
+            color: #ccc;
+            font-size: 13px;
+        }
+
+        .ziwei-analysis {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .analysis-content {
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        .analysis-content .item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .analysis-content .item h4 {
+            color: #ffd700;
+            margin-bottom: 8px;
+        }
+
+        .bagua-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            perspective: 1000px;
+        }
+
+        .bagua {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            animation: rotate 20s linear infinite;
+        }
+
+        .bagua::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,215,0,0.8) 0%, rgba(255,140,0,0.6) 50%, rgba(255,69,0,0.4) 100%);
+            box-shadow: 0 0 50px rgba(255,215,0,0.8), 0 0 100px rgba(255,140,0,0.6), inset 0 0 50px rgba(255,215,0,0.4);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .bagua-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid #ffd700;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+            background: linear-gradient(45deg, transparent 45%, rgba(255,215,0,0.1) 50%, transparent 55%);
+        }
+
+        .bagua-ring:nth-child(2) {
+            width: 85%;
+            height: 85%;
+            top: 7.5%;
+            left: 7.5%;
+            animation-delay: 0.3s;
+            border-width: 3px;
+        }
+
+        .bagua-ring:nth-child(3) {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            animation-delay: 0.6s;
+            border-width: 4px;
+        }
+
+        .bagua-ring:nth-child(4) {
+            width: 55%;
+            height: 55%;
+            top: 22.5%;
+            left: 22.5%;
+            animation-delay: 0.9s;
+            border-width: 5px;
+        }
+
+        .bagua-ring:nth-child(5) {
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+            animation-delay: 1.2s;
+            border-width: 6px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+
+        .bagua-yin-yang {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(to bottom, #ffd700 0%, #ff8c00 100%);
+            box-shadow: 0 0 30px rgba(255,215,0,0.8), inset 0 0 30px rgba(255,255,255,0.3);
+            z-index: 2;
+        }
+
+        .bagua-yin-yang::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            box-shadow: 0 0 20px rgba(255,215,0,0.5);
+        }
+
+        .bagua-yin-yang::after {
+            content: '☯';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255,215,0,0.8);
+            z-index: 3;
+        }
+
+        .bagua-trigrams {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .bagua-trigram {
+            position: absolute;
+            font-size: 24px;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255,215,0,0.8);
+            font-family: monospace;
+        }
+
+        .bagua-trigram:nth-child(1) { top: 10%; left: 50%; transform: translateX(-50%); }
+        .bagua-trigram:nth-child(2) { top: 25%; right: 25%; }
+        .bagua-trigram:nth-child(3) { top: 50%; right: 10%; transform: translateY(-50%); }
+        .bagua-trigram:nth-child(4) { bottom: 25%; right: 25%; }
+        .bagua-trigram:nth-child(5) { bottom: 10%; left: 50%; transform: translateX(-50%); }
+        .bagua-trigram:nth-child(6) { bottom: 25%; left: 25%; }
+        .bagua-trigram:nth-child(7) { top: 50%; left: 10%; transform: translateY(-50%); }
+        .bagua-trigram:nth-child(8) { top: 25%; left: 25%; }
+
+        .btn {
+            display: block;
+            padding: 18px 36px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 auto;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 18px 24px;
+            font-size: 18px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .input-container input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .input-container input:focus {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .input-container .btn {
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .result {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .result h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .hexagram-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .hexagram {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .hexagram-symbol {
+            font-size: 42px;
+            margin: 15px 0;
+            line-height: 1.3;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            font-family: monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .hexagram-symbol .line {
+            display: block;
+            width: 100%;
+            text-align: center;
+            white-space: pre;
+        }
+
+        .hexagram-symbol .yang {
+            letter-spacing: 6px;
+        }
+
+        .hexagram-symbol .yin {
+            letter-spacing: 2px;
+        }
+
+        .hexagram-name {
+            font-size: 36px;
+            color: #ffd700;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .hexagram-text {
+            font-size: 20px;
+            color: #fff;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .analysis-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .analysis-card h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .analysis-card .score {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .score-high { color: #00ff88; }
+        .score-medium { color: #ffd700; }
+        .score-low { color: #ff6b6b; }
+
+        .analysis-card p {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .interpretation {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+            line-height: 1.8;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .interpretation h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .history {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .history h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .history-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ffd700;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .history-item small {
+            color: #888;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .history-item .history-name {
+            color: #ffd700;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .history-item .history-analysis {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #c0392b 100%);
+            margin-top: 20px;
+        }
+
+        .clear-btn:hover {
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .loading::after {
+            content: '占卜中...';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .hexagram-symbol {
+                font-size: 32px;
+            }
+
+            .hexagram-name {
+                font-size: 28px;
+            }
+
+            .analysis-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .history-item .history-analysis {
+                grid-template-columns: 1fr;
+            }
+
+            .bagua {
+                width: 200px;
+                height: 200px;
+            }
+
+            .bagua-yin-yang {
+                width: 100px;
+                height: 100px;
+            }
+
+            .bagua-yin-yang::before {
+                width: 80px;
+                height: 80px;
+            }
+
+            .bagua-yin-yang::after {
+                font-size: 40px;
+            }
+
+            .bagua-trigram {
+                font-size: 16px;
+            }
+
+            .tab-container {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+
+            .palace-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stars-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .input-row {
+                flex-direction: column;
+            }
+
+            .input-container {
+                flex-direction: column;
+            }
+
+            .input-container input {
+                width: 100%;
+            }
+
+            .input-container .btn {
+                width: 100%;
+            }
+
+            .bagua::before {
+                font-size: 80px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>☯ 蹇杨的工具 ☯</h1>
+
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="switchTab('yijing')">易经占卜</button>
+            <button class="tab-btn" onclick="switchTab('ziwei')">紫微斗数</button>
+        </div>
+
+        <div id="yijing-section">
+        <div class="bagua-container">
+            <div class="bagua">
+                <div class="bagua-ring"></div>
+                <div class="bagua-ring"></div>
+                <div class="bagua-ring"></div>
+                <div class="bagua-ring"></div>
+                <div class="bagua-ring"></div>
+                <div class="bagua-yin-yang"></div>
+                <div class="bagua-trigrams">
+                    <div class="bagua-trigram">☰</div>
+                    <div class="bagua-trigram">☱</div>
+                    <div class="bagua-trigram">☲</div>
+                    <div class="bagua-trigram">☳</div>
+                    <div class="bagua-trigram">☴</div>
+                    <div class="bagua-trigram">☵</div>
+                    <div class="bagua-trigram">☶</div>
+                    <div class="bagua-trigram">☷</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="divinationInput" placeholder="请输入想要占卜的事项（人物、物件、时间、问题等）..." onkeypress="handleKeyPress(event)">
+            <button class="btn" onclick="generateHexagram()">开始占卜</button>
+        </div>
+
+        <div class="loading" id="loading"></div>
+
+        <div class="result" id="result">
+            <h2>✧ 占卜结果 ✧</h2>
+            <div class="hexagram-display">
+                <div class="hexagram-name" id="hexagramName">等待占卜...</div>
+                <div class="hexagram-symbol" id="hexagramSymbol">
+                    <span class="yin">━ ━</span><br>
+                    <span class="yang">━━━━━━</span><br>
+                    <span class="yin">━ ━</span><br>
+                    <span class="yang">━━━━━━</span><br>
+                    <span class="yin">━ ━</span><br>
+                    <span class="yang">━━━━━━</span>
+                </div>
+                <div class="hexagram-text" id="hexagramText">点击开始占卜按钮获取卦象</div>
+            </div>
+
+            <div class="analysis-grid" id="analysisGrid">
+                <div class="analysis-card">
+                    <h3>🌟 时运</h3>
+                    <div class="score score-medium" id="fortuneScore">--</div>
+                    <p id="fortuneText">等待分析...</p>
+                </div>
+                <div class="analysis-card">
+                    <h3>💰 财运</h3>
+                    <div class="score score-medium" id="wealthScore">--</div>
+                    <p id="wealthText">等待分析...</p>
+                </div>
+                <div class="analysis-card">
+                    <h3>💑 姻缘</h3>
+                    <div class="score score-medium" id="loveScore">--</div>
+                    <p id="loveText">等待分析...</p>
+                </div>
+            </div>
+
+            <div class="interpretation" id="interpretation">
+                <h3>✧ 卦象详解 ✧</h3>
+                <p>点击开始占卜按钮获取卦象的详细解释和人生启示</p>
+            </div>
+        </div>
+
+        <div class="history">
+            <h2>📜 历史记录</h2>
+            <div class="history-list" id="historyList">
+                <p style="color: #888; text-align: center;">暂无历史记录</p>
+            </div>
+            <button class="btn clear-btn" onclick="clearHistory()">清空历史记录</button>
+        </div>
+        </div>
+
+        <div id="ziwei-section" style="display: none;">
+            <div class="ziwei-input-container">
+                <h2>🍀 紫微斗数排盘 🍀</h2>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>姓名</label>
+                        <input type="text" id="name" placeholder="请输入姓名">
+                    </div>
+                    <div class="input-group">
+                        <label>出生年份</label>
+                        <input type="number" id="birthYear" placeholder="如：1990" min="1900" max="2100">
+                    </div>
+                    <div class="input-group">
+                        <label>出生月份</label>
+                        <input type="number" id="birthMonth" placeholder="1-12" min="1" max="12">
+                    </div>
+                    <div class="input-group">
+                        <label>出生日期</label>
+                        <input type="number" id="birthDay" placeholder="1-31" min="1" max="31">
+                    </div>
+                    <div class="input-group">
+                        <label>出生时辰</label>
+                        <select id="birthHour">
+                            <option value="0">子时(23-01)</option>
+                            <option value="1">丑时(01-03)</option>
+                            <option value="2">寅时(03-05)</option>
+                            <option value="3">卯时(05-07)</option>
+                            <option value="4">辰时(07-09)</option>
+                            <option value="5">巳时(09-11)</option>
+                            <option value="6">午时(11-13)</option>
+                            <option value="7">未时(13-15)</option>
+                            <option value="8">申时(15-17)</option>
+                            <option value="9">酉时(17-19)</option>
+                            <option value="10">戌时(19-21)</option>
+                            <option value="11">亥时(21-23)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>性别</label>
+                        <select id="gender">
+                            <option value="male">男</option>
+                            <option value="female">女</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" onclick="calculateZiwei()">开始排盘</button>
+            </div>
+
+            <div class="ziwei-result" id="ziweiResult" style="display: none;">
+                <div class="ziwei-header">
+                    <h2 id="ziweiTitle">紫微斗数命盘</h2>
+                    <p id="ziweiInfo"></p>
+                </div>
+
+                <div class="ziwei-palace">
+                    <h3>十二宫位</h3>
+                    <div class="palace-grid" id="palaceGrid"></div>
+                </div>
+
+                <div class="ziwei-stars">
+                    <h3>主星分布</h3>
+                    <div class="stars-list" id="starsList"></div>
+                </div>
+
+                <div class="ziwei-analysis">
+                    <h3>命理分析</h3>
+                    <div class="analysis-content" id="ziweiAnalysis"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const hexagrams = [
+            {
+                name: "乾卦",
+                symbol: "━━━━━━\n━━━━━━\n━━━━━━\n━━━━━━\n━━━━━━\n━━━━━━",
+                text: "元亨利贞",
+                interpretation: "乾卦象征天，代表刚健、进取、领导力。此卦预示着成功、发展和积极的变化。你正处于上升期，应该抓住机会，勇敢前进。",
+                fortune: { score: 95, text: "运势极强，正处于人生巅峰期，适合大胆行动，把握机遇。", solution: "保持谦逊，戒骄戒躁，持续努力。" },
+                wealth: { score: 90, text: "财运亨通，适合投资创业，但需注意控制风险。", solution: "适度投资，分散风险，不宜贪多。" },
+                love: { score: 85, text: "感情运势良好，单身者有机会遇到心仪对象，已有伴侣者感情稳定。", solution: "珍惜眼前人，多沟通交流。" }
+            },
+            {
+                name: "坤卦",
+                symbol: "━ ━\n━ ━\n━ ━\n━ ━\n━ ━\n━ ━",
+                text: "元亨，利牝马之贞",
+                interpretation: "坤卦象征地，代表柔顺、包容、承载。此卦预示着合作、积累和耐心。你需要保持谦虚，与他人和谐相处，才能获得成功。",
+                fortune: { score: 75, text: "运势平稳，适合稳扎稳打，不宜冒进。", solution: "脚踏实地，循序渐进，积累实力。" },
+                wealth: { score: 70, text: "财运稳定，适合积累财富，不宜投机。", solution: "开源节流，稳健理财，避免冒险投资。" },
+                love: { score: 80, text: "感情和谐，已婚者家庭和睦，单身者需耐心等待缘分。", solution: "以柔克刚，多包容理解，感情自会顺遂。" }
+            },
+            {
+                name: "屯卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━\n━━━━━━",
+                text: "元亨利贞，勿用有攸往，利建侯",
+                interpretation: "屯卦象征初生，代表困难、开始和积累。此卦预示着新的开始会遇到挑战，但只要坚持努力，最终会成功。",
+                fortune: { score: 60, text: "运势初起，困难与机遇并存，需耐心积累。", solution: "宜静不宜动，先积蓄力量，等待时机成熟。" },
+                wealth: { score: 55, text: "财运初显，需要耐心经营，不宜急于求成。", solution: "开源节流，积累本金，切勿投机取巧。" },
+                love: { score: 65, text: "感情萌芽期，需要用心培养，耐心等待缘分。", solution: "真诚待人，多参加社交活动，缘分自来。" }
+            },
+            {
+                name: "蒙卦",
+                symbol: "━━━━━━\n━ ━\n━━━━━━\n━ ━\n━ ━\n━ ━",
+                text: "亨。匪我求童蒙，童蒙求我",
+                interpretation: "蒙卦象征启蒙，代表学习、教育和成长。此卦预示着你需要学习新知识，接受指导，才能获得进步。",
+                fortune: { score: 70, text: "适合学习提升技能，贵人多助，学业进步。", solution: "虚心学习，多向长辈请教，提升自我。" },
+                wealth: { score: 65, text: "财运平稳，需通过学习提升来增加收入。", solution: "投资自己，学习理财知识，提升赚钱能力。" },
+                love: { score: 72, text: "感情需要沟通和理解，多倾听对方的心声。", solution: "学会倾听，多沟通交流，增进感情。" }
+            },
+            {
+                name: "需卦",
+                symbol: "━━━━━━\n━ ━\n━━━━━━\n━━━━━━\n━ ━\n━ ━",
+                text: "有孚，光亨，贞吉。利涉大川",
+                interpretation: "需卦象征等待，代表耐心、准备和时机。此卦预示着你需要等待合适的时机，做好充分准备，才能取得成功。",
+                fortune: { score: 75, text: "运势蓄势待发，耐心等待时机成熟。", solution: "静待时机，做好准备，机会来临时果断行动。" },
+                wealth: { score: 78, text: "财运即将转好，提前做好准备可获大收益。", solution: "提前规划，积累资金，等待投资良机。" },
+                love: { score: 70, text: "感情需耐心等待，过早行动可能适得其反。", solution: "耐心等待缘分，提升自我，静待花开。" }
+            },
+            {
+                name: "讼卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━ ━\n━━━━━━",
+                text: "有孚窒，惕中吉，终凶。利见大人，不利涉大川",
+                interpretation: "讼卦象征争讼，代表冲突、争议和诉讼。此卦预示着你可能会遇到纠纷，需要保持冷静，寻求和解，避免冲突升级。",
+                fortune: { score: 50, text: "运势不佳，易有纷争，宜保持低调。", solution: "退一步海阔天空，以和为贵，避免争执。" },
+                wealth: { score: 55, text: "财务易有纠纷，签署合同需谨慎。", solution: "谨慎签约，保留证据，必要时寻求法律援助。" },
+                love: { score: 52, text: "感情易有争执，宜冷静处理，避免冲突。", solution: "冷静沟通，换位思考，退让一步海阔天空。" }
+            },
+            {
+                name: "师卦",
+                symbol: "━ ━\n━ ━\n━ ━\n━━━━━━\n━ ━\n━ ━",
+                text: "贞，丈人吉，无咎",
+                interpretation: "师卦象征军队，代表领导、组织和纪律。此卦预示着你需要有领导能力，善于组织和管理，才能取得成功。",
+                fortune: { score: 80, text: "运势强盛，适合带领团队或独立承担责任。", solution: "发挥领导才能，团结他人，共创佳绩。" },
+                wealth: { score: 82, text: "财运稳定，适合规模化经营或团队合作。", solution: "团队协作，分工明确，共同创造财富。" },
+                love: { score: 68, text: "专注事业可能影响感情，需平衡二者。", solution: "平衡事业与感情，多花时间陪伴家人。" }
+            },
+            {
+                name: "比卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "吉。原筮元永贞，无咎。不宁方来，后夫凶",
+                interpretation: "比卦象征亲近，代表团结、合作和友谊。此卦预示着你需要与他人建立良好的关系，相互支持，才能共同发展。",
+                fortune: { score: 82, text: "运势大吉，人际关系和谐，得贵人相助。", solution: "广结善缘，珍惜贵人，互帮互助。" },
+                wealth: { score: 78, text: "财运上升，合作项目易成功。", solution: "寻求合作伙伴，共同发展，互利共赢。" },
+                love: { score: 88, text: "感情运势极佳，已有伴侣者感情甜蜜。", solution: "珍惜眼前人，用心经营感情，幸福长久。" }
+            },
+            {
+                name: "小畜卦",
+                symbol: "━━━━━━\n━━━━━━\n━ ━\n━━━━━━\n━ ━\n━ ━",
+                text: "亨。密云不雨，自我西郊",
+                interpretation: "小畜卦象征小蓄，代表积累、准备和等待。此卦预示着你需要积累力量，做好准备，等待时机成熟。",
+                fortune: { score: 68, text: "运势积累期，需要耐心等待时机。", solution: "积蓄力量，提升能力，静待时机成熟。" },
+                wealth: { score: 72, text: "财运积累中，不宜冒进，稳扎稳打。", solution: "循序渐进，稳健理财，积少成多。" },
+                love: { score: 70, text: "感情发展缓慢，需要循序渐进。", solution: "耐心培养感情，真诚相待，水到渠成。" }
+            },
+            {
+                name: "履卦",
+                symbol: "━ ━\n━━━━━━\n━━━━━━\n━━━━━━\n━ ━\n━ ━",
+                text: "履虎尾，不咥人，亨",
+                interpretation: "履卦象征行走，代表谨慎、行动和实践。此卦预示着你需要谨慎行事，脚踏实地，才能避免危险，获得成功。",
+                fortune: { score: 72, text: "运势平稳，但需小心谨慎行事。", solution: "谨慎行事，三思而后行，避免冲动。" },
+                wealth: { score: 75, text: "财运需谨慎，避免高风险投资。", solution: "稳健投资，规避风险，保本为先。" },
+                love: { score: 70, text: "感情需谨慎选择，不可草率决定。", solution: "慎重选择伴侣，了解对方再作决定。" }
+            },
+            {
+                name: "泰卦",
+                symbol: "━ ━\n━ ━\n━ ━\n━━━━━━\n━━━━━━\n━━━━━━",
+                text: "小往大来，吉亨",
+                interpretation: "泰卦象征通达，代表顺利、和谐和成功。此卦预示着你正处于顺境，一切都会顺利发展，是一个好时机。",
+                fortune: { score: 95, text: "运势极佳，万事亨通，适合大展宏图。", solution: "把握机遇，大胆行动，乘势而上。" },
+                wealth: { score: 92, text: "财运大旺，财富快速积累，好运连连。", solution: "积极投资，扩大经营，财富滚滚来。" },
+                love: { score: 90, text: "感情甜蜜，单身者易遇到良缘。", solution: "珍惜缘分，主动出击，收获幸福。" }
+            },
+            {
+                name: "否卦",
+                symbol: "━━━━━━\n━━━━━━\n━━━━━━\n━ ━\n━ ━\n━ ━",
+                text: "否之匪人，不利君子贞，大往小来",
+                interpretation: "否卦象征阻塞，代表困难、阻碍和逆境。此卦预示着你正处于逆境，需要保持坚定，等待时机，才能转危为安。",
+                fortune: { score: 40, text: "运势低迷，宜守不宜动，保持低调。", solution: "韬光养晦，静待时机，否极泰来。" },
+                wealth: { score: 45, text: "财务困难，需谨慎消费，避免破费。", solution: "开源节流，减少开支，积蓄力量待转机。" },
+                love: { score: 48, text: "感情受阻，需耐心等待转机。", solution: "耐心等待，提升自我，缘分终会到来。" }
+            },
+            {
+                name: "同人卦",
+                symbol: "━━━━━━\n━ ━\n━━━━━━\n━━━━━━\n━ ━\n━ ━",
+                text: "同人于野，亨。利涉大川，利君子贞",
+                interpretation: "同人卦象征同心，代表团结、合作和共识。此卦预示着你需要与他人志同道合，共同努力，才能取得成功。",
+                fortune: { score: 85, text: "运势大吉，得道多助，适合合作发展。", solution: "广交朋友，志同道合，共同发展。" },
+                wealth: { score: 82, text: "财运上升，合作投资可获大收益。", solution: "寻找志同道合的伙伴，合作共赢。" },
+                love: { score: 88, text: "感情运势极佳，易遇到志同道合的伴侣。", solution: "主动社交，寻找共同兴趣的人，缘分自来。" }
+            },
+            {
+                name: "大有卦",
+                symbol: "━━━━━━\n━ ━\n━━━━━━\n━━━━━━\n━━━━━━\n━ ━",
+                text: "元亨",
+                interpretation: "大有卦象征富有，代表成功、收获和繁荣。此卦预示着你会获得丰厚的回报，是一个成功的时期。",
+                fortune: { score: 92, text: "运势强盛，名利双收，诸事顺遂。", solution: "乘势而上，把握机遇，再创佳绩。" },
+                wealth: { score: 95, text: "财运亨通，财富大增，适合扩大经营。", solution: "扩大投资，积极进取，财富翻倍。" },
+                love: { score: 85, text: "感情生活丰富，单身者桃花运旺。", solution: "把握良缘，真诚相待，收获幸福。" }
+            },
+            {
+                name: "谦卦",
+                symbol: "━ ━\n━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━",
+                text: "亨，君子有终",
+                interpretation: "谦卦象征谦虚，代表谦逊、低调和礼让。此卦预示着你需要保持谦虚的态度，才能获得他人的尊重和支持。",
+                fortune: { score: 88, text: "运势大吉，谦受益满，招来福气。", solution: "保持谦逊，虚心学习，福气自来。" },
+                wealth: { score: 85, text: "财运稳定，谦和态度带来更多财富。", solution: "谦和待人，广结善缘，财源广进。" },
+                love: { score: 86, text: "感情顺利，谦逊让你更有魅力。", solution: "谦逊待人，真诚相处，感情甜蜜。" }
+            },
+            {
+                name: "豫卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━━━━━━\n━━━━━━\n━ ━",
+                text: "利建侯行师",
+                interpretation: "豫卦象征愉悦，代表快乐、满足和成功。此卦预示着你会感到快乐和满足，是一个愉快的时期。",
+                fortune: { score: 85, text: "运势极好，心情愉快，诸事顺心。", solution: "保持乐观心态，分享快乐，好运连连。" },
+                wealth: { score: 82, text: "财运上升，收益颇丰，消费愉快。", solution: "适度消费，理性投资，享受财富。" },
+                love: { score: 90, text: "感情甜蜜烂漫，桃花运旺盛。", solution: "珍惜缘分，真诚相待，享受爱情。" }
+            },
+            {
+                name: "随卦",
+                symbol: "━ ━\n━ ━\n━━━━━━\n━ ━\n━━━━━━\n━ ━",
+                text: "元亨利贞，无咎",
+                interpretation: "随卦象征随从，代表跟随、适应和合作。此卦预示着你需要适应环境，跟随正确的方向，才能获得成功。",
+                fortune: { score: 78, text: "运势平稳，顺势而为可得成功。", solution: "顺势而为，灵活应变，把握机遇。" },
+                wealth: { score: 75, text: "财运跟随大势，把握时机可获利。", solution: "跟随趋势，把握时机，稳健获利。" },
+                love: { score: 80, text: "感情需相互适应，保持沟通。", solution: "相互适应，多沟通理解，感情和谐。" }
+            },
+            {
+                name: "蛊卦",
+                symbol: "━━━━━━\n━ ━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "元亨，利涉大川。先甲三日，后甲三日",
+                interpretation: "蛊卦象征蛊惑，代表问题、整顿和改革。此卦预示着你需要解决存在的问题，进行必要的改革，才能获得新的发展。",
+                fortune: { score: 65, text: "运势波动，需整顿改革才能前进。", solution: "正视问题，大胆改革，破旧立新。" },
+                wealth: { score: 68, text: "财务问题需及时处理，整顿后可获益。", solution: "清理旧账，整顿财务，重新出发。" },
+                love: { score: 62, text: "感情需解决存在的问题才能顺利。", solution: "坦诚沟通，解决问题，重建信任。" }
+            },
+            {
+                name: "临卦",
+                symbol: "━ ━\n━ ━\n━━━━━━\n━━━━━━\n━━━━━━\n━ ━",
+                text: "元亨利贞，至于八月有凶",
+                interpretation: "临卦象征来临，代表领导、管理和监督。此卦预示着你需要承担领导责任，善于管理和监督，才能取得成功。",
+                fortune: { score: 80, text: "运势上升，利担任领导角色。", solution: "勇于担当，发挥领导才能，带领团队。" },
+                wealth: { score: 78, text: "财运上升，但需注意八月后的变化。", solution: "把握当前机遇，未雨绸缪，防范风险。" },
+                love: { score: 72, text: "感情稳定，需注意沟通方式。", solution: "主动沟通，表达关心，增进感情。" }
+            },
+            {
+                name: "观卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━ ━\n━ ━",
+                text: "盥而不荐，有孚顒若",
+                interpretation: "观卦象征观察，代表观察、思考和判断。此卦预示着你需要仔细观察，深入思考，做出正确的判断。",
+                fortune: { score: 75, text: "运势观望期，仔细观察可获智慧。", solution: "静观其变，深思熟虑，再做决定。" },
+                wealth: { score: 72, text: "财务需观察形势再做决定。", solution: "观察市场，分析形势，谨慎投资。" },
+                love: { score: 74, text: "感情需冷静观察，不可冲动。", solution: "冷静观察，了解对方，理性选择。" }
+            },
+            {
+                name: "噬嗑卦",
+                symbol: "━━━━━━\n━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━",
+                text: "亨。利用狱",
+                interpretation: "噬嗑卦象征咬合，代表解决、处理和决断。此卦预示着你需要解决当前的问题，做出决断，才能继续前进。",
+                fortune: { score: 70, text: "运势需果断处理问题，不可拖延。", solution: "果断决策，解决问题，扫清障碍。" },
+                wealth: { score: 72, text: "财务纠纷需及时解决。", solution: "及时处理纠纷，清理债务，轻装前行。" },
+                love: { score: 68, text: "感情障碍需尽快清除。", solution: "坦诚面对问题，解决障碍，重归于好。" }
+            },
+            {
+                name: "贲卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━━━━━━\n━ ━\n━━━━━━",
+                text: "亨。小利有攸往",
+                interpretation: "贲卦象征装饰，代表美化、修饰和礼仪。此卦预示着你需要注重外在形象，讲究礼仪，才能获得他人的认可。",
+                fortune: { score: 72, text: "运势小吉，注重形象可加分。", solution: "注重形象，提升气质，赢得好感。" },
+                wealth: { score: 70, text: "财运平稳，适度包装可提升收益。", solution: "适度包装，提升价值，增加收益。" },
+                love: { score: 78, text: "感情注重仪式感可升温。", solution: "注重仪式感，制造浪漫，增进感情。" }
+            },
+            {
+                name: "剥卦",
+                symbol: "━ ━\n━ ━\n━ ━\n━ ━\n━ ━\n━━━━━━",
+                text: "不利有攸往",
+                interpretation: "剥卦象征剥落，代表损失、衰退和危机。此卦预示着你正处于困难时期，需要谨慎行事，避免进一步的损失。",
+                fortune: { score: 35, text: "运势低迷，不宜妄动，宜守。", solution: "韬光养晦，静待时机，切勿妄动。" },
+                wealth: { score: 40, text: "财务易损，不宜投资。", solution: "守住本金，减少开支，等待转机。" },
+                love: { score: 42, text: "感情易生变，需谨慎维护。", solution: "用心维护，多关心对方，避免冲突。" }
+            },
+            {
+                name: "复卦",
+                symbol: "━━━━━━\n━ ━\n━ ━\n━ ━\n━ ━\n━ ━",
+                text: "亨。出入无疾，朋来无咎。反复其道，七日来复，利有攸往",
+                interpretation: "复卦象征回复，代表恢复、转机和希望。此卦预示着你会从困境中恢复过来，迎来新的转机和希望。",
+                fortune: { score: 78, text: "运势复苏，否极泰来，充满希望。", solution: "重整旗鼓，把握转机，迎接新生。" },
+                wealth: { score: 75, text: "财务回暖，新机遇出现。", solution: "抓住新机遇，积极行动，财富回升。" },
+                love: { score: 76, text: "感情修复期，有望重新开始。", solution: "珍惜复合机会，用心经营，重获幸福。" }
+            },
+            {
+                name: "无妄卦",
+                symbol: "━━━━━━\n━━━━━━\n━━━━━━\n━ ━\n━ ━\n━ ━",
+                text: "元亨，利贞。其匪正有眚，不利有攸往",
+                interpretation: "无妄卦象征无妄，代表真实、正直和诚信。此卦预示着你需要保持正直和诚信，才能获得成功。",
+                fortune: { score: 80, text: "运势大吉，正直行事带来好运。", solution: "诚实守信，正直做人，好运自来。" },
+                wealth: { score: 78, text: "正财运势稳定，诚信经营获利。", solution: "诚信经营，正当获利，财源广进。" },
+                love: { score: 74, text: "感情需真诚相待。", solution: "真诚待人，坦率沟通，感情顺利。" }
+            },
+            {
+                name: "大畜卦",
+                symbol: "━━━━━━\n━ ━\n━━━━━━\n━━━━━━\n━━━━━━\n━ ━",
+                text: "利贞，不家食吉，利涉大川",
+                interpretation: "大畜卦象征大蓄，代表积累、储备和发展。此卦预示着你需要积累知识和经验，为未来的发展做准备。",
+                fortune: { score: 82, text: "运势大吉，积累期即将收获。", solution: "继续积累，厚积薄发，收获在即。" },
+                wealth: { score: 85, text: "财运积累丰厚，大有收获。", solution: "稳健投资，积累财富，收获丰厚。" },
+                love: { score: 76, text: "感情积累信任，更加稳固。", solution: "积累信任，用心经营，感情稳固。" }
+            },
+            {
+                name: "颐卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "贞吉。观颐，自求口实",
+                interpretation: "颐卦象征颐养，代表修养、保养和自我提升。此卦预示着你需要注重自我修养，保持健康的生活方式。",
+                fortune: { score: 75, text: "运势平稳，宜注重身心健康。", solution: "注重养生，调节身心，保持健康。" },
+                wealth: { score: 70, text: "财运平稳，不宜过度消耗。", solution: "适度消费，合理理财，细水长流。" },
+                love: { score: 78, text: "感情需用心经营和保养。", solution: "用心呵护，细心经营，感情长久。" }
+            },
+            {
+                name: "大过卦",
+                symbol: "━ ━\n━━━━━━\n━━━━━━\n━━━━━━\n━━━━━━\n━ ━",
+                text: "栋桡，利有攸往，亨",
+                interpretation: "大过卦象征大过，代表过度、超越和变革。此卦预示着你需要采取大胆的行动，超越常规，才能取得突破。",
+                fortune: { score: 72, text: "运势大变动，勇敢突破可获成功。", solution: "大胆突破，超越常规，开创新局。" },
+                wealth: { score: 70, text: "财务需大胆变革才能突破。", solution: "勇于变革，突破困境，财运转机。" },
+                love: { score: 68, text: "感情需突破现状才能改善。", solution: "打破僵局，主动改变，改善关系。" }
+            },
+            {
+                name: "坎卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "习坎，有孚维心，亨，行有尚",
+                interpretation: "坎卦象征水，代表困难、危险和挑战。此卦预示着你会遇到困难和挑战，需要保持信心，勇敢面对。",
+                fortune: { score: 50, text: "运势艰难，需坚定信心克服困难。", solution: "坚定信心，勇敢面对，终会度过难关。" },
+                wealth: { score: 48, text: "财务风险大，需谨慎行事。", solution: "谨慎行事，规避风险，守住本金。" },
+                love: { score: 52, text: "感情需克服困难才能顺利。", solution: "共同面对困难，相互扶持，共渡难关。" }
+            },
+            {
+                name: "离卦",
+                symbol: "━━━━━━\n━ ━\n━━━━━━\n━━━━━━\n━ ━\n━━━━━━",
+                text: "利贞，亨。畜牝牛吉",
+                interpretation: "离卦象征火，代表光明、热情和活力。此卦预示着你会充满活力和热情，是一个积极向上的时期。",
+                fortune: { score: 88, text: "运势光明，充满活力和热情。", solution: "保持热情，积极向上，光明在前。" },
+                wealth: { score: 85, text: "财运光明，正当收益大增。", solution: "正当经营，积极进取，收益大增。" },
+                love: { score: 86, text: "感情热情主动，桃花运旺。", solution: "热情主动，真诚表达，收获爱情。" }
+            },
+            {
+                name: "咸卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━━━━━━\n━ ━\n━ ━",
+                text: "亨，利贞，取女吉",
+                interpretation: "咸卦象征感应，代表感情、交流和互动。此卦预示着你会有良好的人际关系，感情生活顺利。",
+                fortune: { score: 80, text: "运势大吉，人际感应良好。", solution: "真诚待人，广结善缘，人缘极佳。" },
+                wealth: { score: 78, text: "财运感应灵敏，机遇多。", solution: "敏锐把握机遇，积极行动，财运亨通。" },
+                love: { score: 92, text: "感情运势极佳，桃花朵朵开。", solution: "把握缘分，真诚相待，爱情甜蜜。" }
+            },
+            {
+                name: "恒卦",
+                symbol: "━ ━\n━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━",
+                text: "亨，无咎，利贞，利有攸往",
+                interpretation: "恒卦象征恒常，代表持久、稳定和坚持。此卦预示着你需要保持持久的努力，才能获得成功。",
+                fortune: { score: 78, text: "运势稳定持久，恒心致胜。", solution: "持之以恒，坚持不懈，终获成功。" },
+                wealth: { score: 80, text: "财运稳定持久，长线投资有利。", solution: "长线投资，稳健理财，财富积累。" },
+                love: { score: 85, text: "感情恒久稳定，天长地久。", solution: "用心经营，持之以恒，感情长久。" }
+            },
+            {
+                name: "遁卦",
+                symbol: "━━━━━━\n━━━━━━\n━ ━\n━━━━━━\n━ ━\n━ ━",
+                text: "亨，小利贞",
+                interpretation: "遁卦象征退避，代表退让、回避和保护。此卦预示着你需要暂时退让，保护自己，等待合适的时机。",
+                fortune: { score: 62, text: "运势需退让观望，不宜冒进。", solution: "以退为进，韬光养晦，等待时机。" },
+                wealth: { score: 65, text: "财务需保守处理，保护本金。", solution: "保守理财，保护本金，规避风险。" },
+                love: { score: 60, text: "感情需暂时退让，保持距离。", solution: "适当退让，给彼此空间，化解矛盾。" }
+            },
+            {
+                name: "大壮卦",
+                symbol: "━ ━\n━ ━\n━━━━━━\n━━━━━━\n━━━━━━\n━ ━",
+                text: "利贞",
+                interpretation: "大壮卦象征壮大，代表强大、成功和扩张。此卦预示着你正处于强大的时期，会取得显著的成功。",
+                fortune: { score: 90, text: "运势大壮，诸事兴旺，实力大增。", solution: "乘势而上，大展宏图，事业兴旺。" },
+                wealth: { score: 88, text: "财务大壮，收益倍增。", solution: "积极进取，扩大经营，财富倍增。" },
+                love: { score: 82, text: "感情强大，魅力四射。", solution: "展现魅力，主动追求，收获爱情。" }
+            },
+            {
+                name: "晋卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "康侯用锡马蕃庶，昼日三接",
+                interpretation: "晋卦象征晋升，代表进步、发展和成功。此卦预示着你会得到晋升和发展的机会，是一个上升的时期。",
+                fortune: { score: 92, text: "运势飞升，晋升有望，前途光明。", solution: "把握机遇，积极进取，步步高升。" },
+                wealth: { score: 88, text: "财运上升，收益大幅增加。", solution: "积极投资，扩大收益，财富飞升。" },
+                love: { score: 80, text: "感情进步，关系更进一步。", solution: "主动表达，推动关系，更进一步。" }
+            },
+            {
+                name: "明夷卦",
+                symbol: "━ ━\n━ ━\n━ ━\n━━━━━━\n━━━━━━\n━━━━━━",
+                text: "利艰贞",
+                interpretation: "明夷卦象征光明受损，代表困难、挫折和考验。此卦预示着你会遇到困难和挫折，需要保持坚定，才能度过难关。",
+                fortune: { score: 45, text: "运势受损，需在艰难中坚持。", solution: "韬光养晦，坚守正道，等待光明。" },
+                wealth: { score: 48, text: "财务受损，需谨慎度过难关。", solution: "谨慎理财，减少开支，度过难关。" },
+                love: { score: 50, text: "感情受挫，需耐心修复。", solution: "耐心修复，真诚沟通，重归于好。" }
+            },
+            {
+                name: "家人卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "利女贞",
+                interpretation: "家人卦象征家庭，代表家庭、和谐和责任。此卦预示着你需要注重家庭和谐，承担家庭责任。",
+                fortune: { score: 82, text: "运势稳定，家庭和睦带来好运。", solution: "注重家庭，和睦相处，好运自来。" },
+                wealth: { score: 80, text: "财运与家庭相关，家人相助生财。", solution: "家庭合作，共同致富，财源广进。" },
+                love: { score: 95, text: "感情甜蜜，家庭幸福美满。", solution: "珍惜家人，用心经营，幸福美满。" }
+            },
+            {
+                name: "睽卦",
+                symbol: "━ ━\n━━━━━━\n━━━━━━\n━━━━━━\n━ ━\n━ ━",
+                text: "小事吉",
+                interpretation: "睽卦象征乖离，代表分歧、差异和调和。此卦预示着你会遇到分歧和差异，需要善于调和，才能达成共识。",
+                fortune: { score: 65, text: "运势有小分歧，需善于调和。", solution: "求同存异，善于调和，化解分歧。" },
+                wealth: { score: 68, text: "财务有分歧，协商可解决。", solution: "协商沟通，求同存异，达成共识。" },
+                love: { score: 62, text: "感情有差异，需多沟通理解。", solution: "多沟通理解，包容差异，求同存异。" }
+            },
+            {
+                name: "蹇卦",
+                symbol: "━ ━\n━ ━\n━ ━\n━━━━━━\n━━━━━━\n━━━━━━",
+                text: "利西南，不利东北。利见大人，贞吉",
+                interpretation: "蹇卦象征困难，代表阻碍、困难和挑战。此卦预示着你会遇到困难和挑战，需要寻求帮助，才能克服困难。",
+                fortune: { score: 48, text: "运势蹇难，需贵人相助。", solution: "寻求贵人帮助，借助外力，度过难关。" },
+                wealth: { score: 50, text: "财务阻碍，寻求帮助可解困。", solution: "寻求专业建议，借助他人力量，解决困难。" },
+                love: { score: 52, text: "感情阻碍，需他人调解。", solution: "寻求长辈或朋友调解，化解矛盾。" }
+            },
+            {
+                name: "解卦",
+                symbol: "━━━━━━\n━ ━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "利西南。无所往，其来复吉。有攸往，夙吉",
+                interpretation: "解卦象征解脱，代表解决、释放和自由。此卦预示着你会从困难中解脱出来，获得自由和新的机会。",
+                fortune: { score: 82, text: "运势解脱，困难解除，好运到来。", solution: "把握解脱机会，积极行动，迎接好运。" },
+                wealth: { score: 80, text: "财务解脱，经济压力减轻。", solution: "抓住转机，减轻负担，财务好转。" },
+                love: { score: 78, text: "感情解脱，误会消除。", solution: "消除误会，坦诚沟通，重归于好。" }
+            },
+            {
+                name: "损卦",
+                symbol: "━ ━\n━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━",
+                text: "有孚，元吉，无咎，可贞，利有攸往。曷之用？二簋可用享",
+                interpretation: "损卦象征损失，代表减少、牺牲和付出。此卦预示着你需要做出一定的牺牲和付出，才能获得更大的回报。",
+                fortune: { score: 65, text: "运势需有付出，适度牺牲可获益。", solution: "舍得舍得，有舍才有得，付出终有回报。" },
+                wealth: { score: 68, text: "财务需先付出后收获。", solution: "先投资后收益，付出终有回报。" },
+                love: { score: 70, text: "感情需包容和付出。", solution: "多付出少计较，真心换真心。" }
+            },
+            {
+                name: "益卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━━━━━━\n━ ━\n━ ━",
+                text: "利有攸往，利涉大川",
+                interpretation: "益卦象征增益，代表增加、收益和帮助。此卦预示着你会获得收益和帮助，是一个有利的时期。",
+                fortune: { score: 88, text: "运势增益，好处多多。", solution: "把握机遇，积极进取，收获多多。" },
+                wealth: { score: 90, text: "财运大益，收益丰厚。", solution: "积极投资，扩大收益，财富增长。" },
+                love: { score: 85, text: "感情增益，甜蜜加倍。", solution: "珍惜缘分，用心经营，甜蜜加倍。" }
+            },
+            {
+                name: "夬卦",
+                symbol: "━━━━━━\n━━━━━━\n━━━━━━\n━━━━━━\n━ ━\n━ ━",
+                text: "扬于王庭，孚号，有厉，告自邑，不利即戎，利有攸往",
+                interpretation: "夬卦象征决断，代表决断、解决和清除。此卦预示着你需要做出决断，解决当前的问题，才能继续前进。",
+                fortune: { score: 75, text: "运势决断，果断处理可成功。", solution: "果断决策，当机立断，解决问题。" },
+                wealth: { score: 72, text: "财务需当机立断。", solution: "果断处理财务问题，避免拖延。" },
+                love: { score: 70, text: "感情需果断表态。", solution: "果断表态，明确态度，避免暧昧。" }
+            },
+            {
+                name: "姤卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━ ━\n━ ━",
+                text: "女壮，勿用取女",
+                interpretation: "姤卦象征邂逅，代表相遇、机会和变化。此卦预示着你会遇到新的机会和变化，需要把握时机。",
+                fortune: { score: 78, text: "运势邂逅，新机会出现。", solution: "把握邂逅机会，积极行动，创造机遇。" },
+                wealth: { score: 75, text: "财运邂逅，新商机出现。", solution: "抓住新商机，积极开拓，财源广进。" },
+                love: { score: 88, text: "感情邂逅，桃花运旺盛。", solution: "把握邂逅缘分，真诚相待，收获爱情。" }
+            },
+            {
+                name: "萃卦",
+                symbol: "━ ━\n━ ━\n━ ━\n━━━━━━\n━ ━\n━ ━",
+                text: "亨。王假有庙，利见大人，亨，利贞。用大牲吉，利有攸往",
+                interpretation: "萃卦象征聚集，代表聚集、团结和合作。此卦预示着你会与他人聚集在一起，共同合作，取得成功。",
+                fortune: { score: 85, text: "运势聚集，人气旺盛，得道多助。", solution: "广结善缘，团结合作，共创佳绩。" },
+                wealth: { score: 82, text: "财运聚集，合作可获大益。", solution: "寻求合作，共同发展，互利共赢。" },
+                love: { score: 80, text: "感情聚集，人缘佳，桃花旺。", solution: "多参加社交活动，广结善缘，桃花运旺。" }
+            },
+            {
+                name: "升卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━ ━\n━━━━━━",
+                text: "元亨，用见大人，勿恤，南征吉",
+                interpretation: "升卦象征上升，代表上升、发展和进步。此卦预示着你会不断上升和发展，是一个进步的时期。",
+                fortune: { score: 90, text: "运势上升，发展进步，步步高升。", solution: "积极进取，把握机遇，步步高升。" },
+                wealth: { score: 88, text: "财运上升，积累增加。", solution: "积极积累，稳步发展，财富增长。" },
+                love: { score: 82, text: "感情上升，关系进展顺利。", solution: "主动推进关系，积极发展，更进一步。" }
+            },
+            {
+                name: "困卦",
+                symbol: "━ ━\n━ ━\n━ ━\n━━━━━━\n━━━━━━\n━━━━━━",
+                text: "亨，贞，大人吉，无咎，有言不信",
+                interpretation: "困卦象征困境，代表困难、挫折和考验。此卦预示着你会遇到困境，需要保持坚定，才能走出困境。",
+                fortune: { score: 42, text: "运势困境，需坚定信念才能解脱。", solution: "坚定信念，保持乐观，困境终会过去。" },
+                wealth: { score: 45, text: "财务困境，需谨慎理财。", solution: "谨慎理财，开源节流，度过难关。" },
+                love: { score: 48, text: "感情困境，需耐心等待转机。", solution: "耐心等待，真诚沟通，转机终会到来。" }
+            },
+            {
+                name: "井卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "改邑不改井，无丧无得，往来井井。汔至，亦未繘井，羸其瓶，凶",
+                interpretation: "井卦象征水井，代表滋养、持续和稳定。此卦预示着你需要保持稳定，持续努力，才能获得滋养和发展。",
+                fortune: { score: 70, text: "运势稳定，需持续努力。", solution: "持续努力，保持稳定，终有收获。" },
+                wealth: { score: 72, text: "财运稳定，均衡发展。", solution: "稳健理财，均衡发展，细水长流。" },
+                love: { score: 74, text: "感情稳定，细水长流。", solution: "用心经营，细水长流，感情长久。" }
+            },
+            {
+                name: "革卦",
+                symbol: "━━━━━━\n━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━",
+                text: "巳日乃孚，元亨，利贞，悔亡",
+                interpretation: "革卦象征变革，代表改革、创新和变化。此卦预示着你需要进行改革和创新，才能适应变化，获得新的发展。",
+                fortune: { score: 78, text: "运势变革，改革创新可获新生。", solution: "勇于变革，创新求变，开创新局。" },
+                wealth: { score: 75, text: "财务变革，新模式带来新收益。", solution: "创新模式，开拓新路，财源广进。" },
+                love: { score: 72, text: "感情变革，突破现状可改善。", solution: "改变相处方式，创新浪漫，改善关系。" }
+            },
+            {
+                name: "鼎卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━━━━━━\n━━━━━━\n━ ━",
+                text: "元吉，亨",
+                interpretation: "鼎卦象征鼎器，代表权力、地位和成就。此卦预示着你会获得权力和地位，是一个成功的时期。",
+                fortune: { score: 88, text: "运势大吉，权力地位提升。", solution: "把握机遇，积极进取，地位提升。" },
+                wealth: { score: 90, text: "财运大吉，富贵双全。", solution: "积极经营，财富积累，富贵双全。" },
+                love: { score: 80, text: "感情稳定，受人尊重。", solution: "珍惜感情，相互尊重，稳定发展。" }
+            },
+            {
+                name: "震卦",
+                symbol: "━ ━\n━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━",
+                text: "亨。震来虩虩，笑言哑哑。震惊百里，不丧匕鬯",
+                interpretation: "震卦象征雷，代表震动、警示和行动。此卦预示着你会受到震动和警示，需要及时行动，才能应对变化。",
+                fortune: { score: 72, text: "运势震动，及时应对可化险为夷。", solution: "保持警觉，及时应对，化险为夷。" },
+                wealth: { score: 70, text: "财务震动，冷静处理可保收益。", solution: "冷静应对，稳健处理，保住收益。" },
+                love: { score: 68, text: "感情震动，妥善处理可和解。", solution: "冷静沟通，妥善处理，化解矛盾。" }
+            },
+            {
+                name: "艮卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "艮其背，不获其身，行其庭，不见其人，无咎",
+                interpretation: "艮卦象征山，代表停止、稳重和保守。此卦预示着你需要停止当前的行动，反思自己，才能做出正确的决定。",
+                fortune: { score: 68, text: "运势宜停，宜静不宜动。", solution: "静心反思，暂停行动，等待时机。" },
+                wealth: { score: 70, text: "财务宜稳，不宜冒险。", solution: "稳健理财，避免冒险，保本为先。" },
+                love: { score: 72, text: "感情宜缓，需要冷静思考。", solution: "冷静思考，暂缓决定，理性处理。" }
+            },
+            {
+                name: "渐卦",
+                symbol: "━ ━\n━ ━\n━ ━\n━━━━━━\n━ ━\n━ ━",
+                text: "女归吉，利贞",
+                interpretation: "渐卦象征渐进，代表渐进、发展和积累。此卦预示着你需要循序渐进，不断积累，才能获得成功。",
+                fortune: { score: 80, text: "运势渐进，稳步上升。", solution: "循序渐进，稳步发展，终达目标。" },
+                wealth: { score: 82, text: "财运渐进，积少成多。", solution: "积少成多，稳健积累，财富增长。" },
+                love: { score: 85, text: "感情渐进，水到渠成。", solution: "循序渐进，用心经营，水到渠成。" }
+            },
+            {
+                name: "归妹卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━ ━\n━━━━━━",
+                text: "征凶，无攸利",
+                interpretation: "归妹卦象征婚嫁，代表婚姻、关系和承诺。此卦预示着你需要谨慎处理婚姻和关系问题，才能获得幸福。",
+                fortune: { score: 55, text: "运势需谨慎，不宜草率。", solution: "谨慎行事，三思后行，避免冲动。" },
+                wealth: { score: 52, text: "财务需谨慎，避免损失。", solution: "谨慎投资，避免风险，保护本金。" },
+                love: { score: 60, text: "感情需谨慎，不可冲动结婚。", solution: "慎重考虑，了解对方，再做决定。" }
+            },
+            {
+                name: "丰卦",
+                symbol: "━━━━━━\n━ ━\n━━━━━━\n━━━━━━\n━ ━\n━━━━━━",
+                text: "亨，王假之，勿忧，宜日中",
+                interpretation: "丰卦象征丰盛，代表丰收、成功和繁荣。此卦预示着你会获得丰收和成功，是一个繁荣的时期。",
+                fortune: { score: 92, text: "运势大丰，诸事兴旺，如日中天。", solution: "把握机遇，乘势而上，收获丰盛。" },
+                wealth: { score: 95, text: "财运大丰，盆满钵满。", solution: "积极进取，扩大收益，财富丰收。" },
+                love: { score: 88, text: "感情大丰，幸福美满。", solution: "珍惜幸福，用心经营，美满甜蜜。" }
+            },
+            {
+                name: "旅卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━━━━━━\n━ ━\n━━━━━━",
+                text: "小亨，旅贞吉",
+                interpretation: "旅卦象征旅行，代表旅行、变迁和适应。此卦预示着你会经历变迁，需要适应新的环境，才能获得成功。",
+                fortune: { score: 70, text: "运势奔波，需适应变化。", solution: "灵活应变，适应环境，把握机遇。" },
+                wealth: { score: 72, text: "财运变动，灵活应对可获利。", solution: "灵活应对，把握变化，获得收益。" },
+                love: { score: 68, text: "感情变迁，需相互适应。", solution: "相互适应，共同面对，感情稳定。" }
+            },
+            {
+                name: "巽卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "小亨，利有攸往，利见大人",
+                interpretation: "巽卦象征风，代表顺从、灵活和适应。此卦预示着你需要保持灵活，适应环境，才能获得成功。",
+                fortune: { score: 75, text: "运势灵活，顺势而为可成事。", solution: "顺势而为，灵活应变，把握机遇。" },
+                wealth: { score: 78, text: "财运灵活，把握机会可获利。", solution: "灵活把握机会，顺势而为，获利丰厚。" },
+                love: { score: 74, text: "感情灵活，随机应变可顺利。", solution: "灵活应对，随机应变，感情顺利。" }
+            },
+            {
+                name: "兑卦",
+                symbol: "━ ━\n━ ━\n━━━━━━\n━ ━\n━ ━\n━ ━",
+                text: "亨，利贞",
+                interpretation: "兑卦象征泽，代表喜悦、和谐和交流。此卦预示着你会感到喜悦和和谐，是一个愉快的时期。",
+                fortune: { score: 85, text: "运势喜悦，和谐顺利。", solution: "保持喜悦心情，和谐相处，好运连连。" },
+                wealth: { score: 82, text: "财运愉快，收益满意。", solution: "愉快合作，和谐经营，收益满意。" },
+                love: { score: 92, text: "感情喜悦，甜蜜和谐。", solution: "珍惜甜蜜，和谐相处，幸福美满。" }
+            },
+            {
+                name: "涣卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "亨，王假有庙，利涉大川，利贞",
+                interpretation: "涣卦象征涣散，代表涣散、离散和重组。此卦预示着你会经历涣散和重组，需要重新组织，才能获得新的发展。",
+                fortune: { score: 65, text: "运势涣散，需重新整合资源。", solution: "重新整合，调整方向，开创新局。" },
+                wealth: { score: 68, text: "财务涣散，需重新规划。", solution: "重新规划，整合资源，财务好转。" },
+                love: { score: 62, text: "感情涣散，需重新经营。", solution: "重新经营，用心修复，重归于好。" }
+            },
+            {
+                name: "节卦",
+                symbol: "━ ━\n━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━",
+                text: "亨。苦节不可贞",
+                interpretation: "节卦象征节制，代表节制、约束和自律。此卦预示着你需要保持节制和自律，才能获得成功。",
+                fortune: { score: 75, text: "运势需节制，适度而行。", solution: "适度而行，节制欲望，稳步发展。" },
+                wealth: { score: 78, text: "财务需节制，量入为出。", solution: "量入为出，适度消费，财富稳定。" },
+                love: { score: 74, text: "感情需节制，不可过度。", solution: "适度表达，不过分依赖，感情和谐。" }
+            },
+            {
+                name: "中孚卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━ ━\n━━━━━━\n━ ━",
+                text: "豚鱼吉，利涉大川，利贞",
+                interpretation: "中孚卦象征诚信，代表诚信、信任和忠诚。此卦预示着你需要保持诚信和忠诚，才能获得他人的信任和支持。",
+                fortune: { score: 85, text: "运势大吉，诚信带来好运。", solution: "诚实守信，赢得信任，好运自来。" },
+                wealth: { score: 82, text: "财运大吉，诚信经营长久。", solution: "诚信经营，长久发展，财源广进。" },
+                love: { score: 90, text: "感情大吉，忠诚赢得真爱。", solution: "忠诚专一，真心相待，收获真爱。" }
+            },
+            {
+                name: "小过卦",
+                symbol: "━ ━\n━ ━\n━━━━━━\n━ ━\n━ ━\n━ ━",
+                text: "亨，利贞，可小事，不可大事。飞鸟遗之音，不宜上宜下，大吉",
+                interpretation: "小过卦象征小过，代表小错误、调整和改进。此卦预示着你会犯一些小错误，需要及时调整和改进，才能避免更大的问题。",
+                fortune: { score: 65, text: "运势有小过，需及时改正。", solution: "及时改正错误，吸取教训，继续前行。" },
+                wealth: { score: 68, text: "财务有小误，需及时调整。", solution: "及时调整策略，纠正错误，避免损失。" },
+                love: { score: 70, text: "感情有小错，需及时弥补。", solution: "及时弥补过失，真诚道歉，重归于好。" }
+            },
+            {
+                name: "既济卦",
+                symbol: "━━━━━━\n━ ━\n━━━━━━\n━ ━\n━━━━━━\n━ ━",
+                text: "亨，小利贞，初吉终乱",
+                interpretation: "既济卦象征完成，代表完成、成功和结束。此卦预示着你已经完成了当前的任务，但需要保持警惕，避免功亏一篑。",
+                fortune: { score: 75, text: "运势已成，需警惕后续变化。", solution: "保持警惕，居安思危，守住成果。" },
+                wealth: { score: 78, text: "财务已成，需守成保业。", solution: "守住财富，稳健经营，避免损失。" },
+                love: { score: 72, text: "感情已成，需用心维护。", solution: "用心维护，珍惜感情，避免生变。" }
+            },
+            {
+                name: "未济卦",
+                symbol: "━ ━\n━━━━━━\n━ ━\n━━━━━━\n━ ━\n━━━━━━",
+                text: "亨，小狐汔济，濡其尾，无攸利",
+                interpretation: "未济卦象征未完成，代表未完成、继续和发展。此卦预示着你还没有完成当前的任务，需要继续努力，才能获得成功。",
+                fortune: { score: 62, text: "运势未成，仍需努力。", solution: "继续努力，坚持不懈，终会成功。" },
+                wealth: { score: 60, text: "财务未成，需继续奋斗。", solution: "继续奋斗，积累财富，终有收获。" },
+                love: { score: 65, text: "感情未成，需继续培养。", solution: "继续培养，用心经营，水到渠成。" }
+            }
+        ];
+
+        const STORAGE_KEY = 'yi_ching_history_v2';
+
+        const TIANGAN = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+        const DIZHI = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+        const PALACE_NAMES = ['命宫', '兄弟宫', '夫妻宫', '子女宫', '财帛宫', '疾厄宫', '迁移宫', '仆役宫', '官禄宫', '田宅宫', '福德宫', '父母宫'];
+
+        const ZIWEI_STARS = {
+            main: ['紫微星', '天机星', '太阳星', '武曲星', '天同星', '廉贞星'],
+            assistant: ['天府星', '太阴星', '贪狼星', '巨门星', '天相星', '文曲星', '破军星'],
+            malefic: ['七杀星', '六煞星', '铃星', '火星', '地空星', '地劫星']
+        };
+
+        const SI_HUA = {
+            sheng: ['化禄', '化权', '化科', '化忌'],
+            location: {
+                0: 4, 1: 5, 2: 6, 3: 7, 4: 8, 5: 9,
+                6: 10, 7: 11, 8: 0, 9: 1, 10: 2, 11: 3
+            }
+        };
+
+        const STAR_PROPERTIES = {
+            '紫微星': { type: 'main', element: '土', nature: '尊贵、领导', interpretation: '紫微星代表尊贵和领导力，命带此星者多有成就大事的气魄，善于领导和管理。' },
+            '天机星': { type: 'main', element: '木', nature: '智慧、机敏', interpretation: '天机星代表智慧和谋划，命带此星者头脑灵活，善于思考和分析，适合从事策划工作。' },
+            '太阳星': { type: 'main', element: '火', nature: '热情、光明', interpretation: '太阳星代表光明和热情，命带此星者性格开朗，积极主动，人缘较好，适合社交和公共关系工作。' },
+            '武曲星': { type: 'main', element: '金', nature: '刚毅、果断', interpretation: '武曲星代表刚强和决断，命带此星者性格坚毅，做事果断，适合从事实业、金融等需要决断力的工作。' },
+            '天同星': { type: 'main', element: '水', nature: '温和、享受', interpretation: '天同星代表温和与享受，命带此星者性格温和，懂得享受生活，人际关系和谐。' },
+            '廉贞星': { type: 'main', element: '火', nature: '感情、桃花', interpretation: '廉贞星代表感情和桃花运，命带此星者感情丰富，善于表达，但需注意感情方面的处理。' },
+            '天府星': { type: 'assistant', element: '土', nature: '安稳、福气', interpretation: '天府星代表福气和安稳，命带此星者生活稳定，福运较好，财运不错。' },
+            '太阴星': { type: 'assistant', element: '水', nature: '柔情、财富', interpretation: '太阴星代表柔性和财富，命带此星者感情细腻，善于积累财富，女性缘较好。' },
+            '贪狼星': { type: 'assistant', element: '木水', nature: '欲望、桃花', interpretation: '贪狼星代表欲望和桃花，命带此星者欲望强烈，桃花运旺，需注意控制贪欲。' },
+            '巨门星': { type: 'assistant', element: '水', nature: '是非、口才', interpretation: '巨门星代表口才和是非，命带此星者能言善辩，但需注意避免口舌是非。' },
+            '天相星': { type: 'assistant', element: '水', nature: '文雅、辅佐', interpretation: '天相星代表辅佐和文雅，命带此星者善于辅助他人，有文雅气质，适合做副手或秘书。' },
+            '文曲星': { type: 'assistant', element: '水', nature: '文采、才华', interpretation: '文曲星代表文采和才华，命带此星者才华横溢，适合从事文化、教育、艺术等工作。' },
+            '破军星': { type: 'assistant', element: '水', nature: '破旧、变革', interpretation: '破军星代表破旧和变革，命带此星者善于打破旧有格局，适合改革创新。' },
+            '七杀星': { type: 'malefic', element: '金火', nature: '刚烈、变动', interpretation: '七杀星代表刚烈和变动，命带此星者性格刚烈，人生起伏较大。' },
+            '六煞星': { type: 'malefic', element: '火', nature: '阻碍、煞气', interpretation: '六煞星代表阻碍和煞气，命带此星者需注意化解煞气，避免口舌是非。' },
+            '铃星': { type: 'malefic', element: '火', nature: '冲动、桃花', interpretation: '铃星代表冲动和桃花，命带此星者易冲动行事，桃花运较旺。' },
+            '火星': { type: 'malefic', element: '火', nature: '燥热、冲动', interpretation: '火星代表燥热和冲动，命带此星者脾气较急，需注意控制情绪。' },
+            '地空星': { type: 'malefic', element: '火', nature: '空幻、不定', interpretation: '地空星代表空幻和不稳定，命带此星者思维独特，但容易有不切实际的想法。' },
+            '地劫星': { type: 'malefic', element: '火', nature: '劫难、破财', interpretation: '地劫星代表劫难和破财，命带此星者需注意守财，避免投资冒险。' }
+        };
+
+        const PALACE_ANALYSIS = {
+            '命宫': {
+                base: '命宫是你的命运核心，就像人生的导航仪，决定着你的性格、命运走向和整体运势。',
+                personality: {
+                    '紫微星': '有领导才能，追求卓越，爱面子，注重身份地位。',
+                    '天机星': '聪明机智，思维敏捷，爱思考，有策划能力。',
+                    '太阳星': '热情大方，正直光明，爱表现，有责任心。',
+                    '武曲星': '刚强果断，踏实勤勉，爱赚钱，有商业头脑。',
+                    '天同星': '温和善良，乐天知足，爱享受，人缘好。',
+                    '廉贞星': '感情丰富，爱恨分明，爱自由，有艺术气质。'
+                },
+                career: '命宫决定事业方向。星曜强适合当领导，星曜弱适合技术或艺术。',
+                wealth: '命宫与财运相关。主星好财运稳，主星差财来财去。',
+                relationship: '命宫反映感情基础。星曜好遇理想伴侣，星曜差感情多波折。',
+                health: '命宫与健康相关。星曜稳身体好，星曜差需注意养生。',
+                good: '命宫星曜强的人，积极向上，有目标有执行力，容易成大事。',
+                bad: '命宫星曜弱的人，可能缺乏自信，命运多起伏，需要后天努力。'
+            },
+            '兄弟宫': {
+                base: '兄弟宫代表兄弟姐妹、朋友、合伙人，反映你的人脉和社交能力。',
+                siblingRelation: '星曜强的人，兄弟姐妹感情好，互相帮助；星曜弱则关系淡。',
+                partnerRelation: '合作时，星曜好伙伴给力，合作顺利；星曜差防被坑。',
+                socialCircle: '星曜强的人，朋友多，人脉广，会社交。',
+                financial: '通过朋友、合伙赚钱的机会。注意资金往来风险。',
+                good: '兄弟宫星曜强的人，身边有得力朋友，人际关系好，事业有人帮。',
+                bad: '兄弟宫星曜弱的人，兄弟姐妹关系淡，身边小人多，合作要谨慎。'
+            },
+            '夫妻宫': {
+                base: '夫妻宫是最受关注的宫位，代表婚姻、恋爱和配偶情况。',
+                marriageTiming: '星曜好容易早婚，星曜差可能晚婚或感情波折。',
+                spousePersonality: '配偶性格与星曜有关。紫微配端庄，天机配聪明，太阳配热情。',
+                marriageQuality: '化禄入夫妻宫感情甜，化忌入夫妻宫多争吵。',
+                emotional: '星曜好懂得爱人，星曜差感情路坎坷。',
+                good: '夫妻宫星曜强的人，婚姻幸福，配偶好，婚后财运事业都提升。',
+                bad: '夫妻宫星曜弱的人，婚姻多波折，可能晚婚或离婚，需要用心经营。'
+            },
+            '子女宫': {
+                base: '子女宫代表子女缘分、桃花运、创造力和活力。',
+                childRelation: '星曜强子女成材孝顺，星曜弱与子女缘分薄。',
+                creativity: '星曜好有艺术天赋，适合创意行业。',
+                romantic: '星曜好桃花运正，星曜差烂桃花多。',
+                vitality: '星曜强精力充沛，星曜差精神压力大。',
+                good: '子女宫星曜强的人，桃花运好，创造力强，子女缘分深，家庭幸福。',
+                bad: '子女宫星曜弱的人，桃花运乱，子女缘分薄，创造力受限。'
+            },
+            '财帛宫': {
+                base: '财帛宫决定财富状况，代表赚钱能力、理财观念和财务状况。',
+                earningAbility: '紫微入财帛适合投资，武曲入财帛财运旺。',
+                financial: '星曜好会理财，星曜差乱花钱。',
+                wealthLevel: '星曜好财运亨通，星曜差财来财去。',
+                moneyAttitude: '星曜好对钱不挥霍不计较，星曜差要么抠门要么乱花。',
+                good: '财帛宫星曜强的人，财运好，会理财，财源广，物质生活好。',
+                bad: '财帛宫星曜弱的人，财运起伏大，不会理财，需要节省。'
+            },
+            '疾厄宫': {
+                base: '疾厄宫代表健康状况、体质和意外风险。',
+                healthType: '火性星曜注意心血管，水性星曜注意肾脏。',
+                disease: '紫微注意脾胃，天机注意肝胆，太阳注意心脏。',
+                accident: '煞星多或化忌入疾厄宫，要注意安全。',
+                recovery: '星曜好恢复快，星曜差容易得慢性病。',
+                good: '疾厄宫星曜稳的人，身体好，少生病，平安。',
+                bad: '疾厄宫星曜弱的人，体弱多病，易有意外，要特别注意健康。'
+            },
+            '迁移宫': {
+                base: '迁移宫代表外出发展、旅游和与外界互动。',
+                travel: '星曜好旅途顺利，星曜差出行多阻碍。',
+                career: '星曜强适合去外地发展，容易成功。',
+                social: '星曜好出门遇贵人，星曜差防被骗。',
+                change: '星曜好变动带来好运，星曜差变动带来麻烦。',
+                good: '迁移宫星曜强的人，外出顺利，遇贵人，人脉广，机会多。',
+                bad: '迁移宫星曜弱的人，不宜远行，易有意外或纠纷。'
+            },
+            '仆役宫': {
+                base: '仆役宫代表下属、朋友和小人运势。',
+                subordinate: '星曜好下属得力忠诚，星曜差下属无能或背叛。',
+                cooperation: '星曜好合作愉快，星曜差合作多纠纷。',
+                rival: '星曜差身边小人多，易被算计。',
+                loyal: '星曜强身边多忠诚朋友，星曜弱要注意朋友质量。',
+                good: '仆役宫星曜强的人，有得力助手，合作伙伴好，遇事有人帮。',
+                bad: '仆役宫星曜弱的人，易遇小人，被算计，合作要小心。'
+            },
+            '官禄宫': {
+                base: '官禄宫代表事业、学业、晋升和社会地位。',
+                career: '星曜好适合创业或当领导，星曜差适合技术工作。',
+                academic: '星曜好学业顺利，学历高；星曜差学业受阻。',
+                promotion: '化禄、化权入官禄宫容易升官，化忌入官禄宫事业受阻。',
+                status: '星曜强社会地位高，受尊重；星曜弱默默无闻。',
+                good: '官禄宫星曜强的人，事业顺利，学业好，容易升官，受认可。',
+                bad: '官禄宫星曜弱的人，事业受阻，学业差，难升官，需要更努力。'
+            },
+            '田宅宫': {
+                base: '田宅宫代表房产、家庭环境和不动产。',
+                property: '星曜好能有好房子，星曜差买房难。',
+                family: '星曜好家庭和睦，住所稳定；星曜差家庭关系紧张。',
+                ancestry: '星曜好能继承家业，星曜差要白手起家。',
+                realEstate: '星曜好适合投资房产，星曜差投资要谨慎。',
+                good: '田宅宫星曜强的人，房产运好，家庭和睦，生活稳定。',
+                bad: '田宅宫星曜弱的人，房产运差，家庭关系不稳定，住所多变。'
+            },
+            '福德宫': {
+                base: '福德宫代表福气、精神状态和生活品质。',
+                fortune: '星曜好福气多，能逢凶化吉；星曜差福少辛苦。',
+                enjoyment: '星曜好会享受生活，兴趣广；星曜差生活单调。',
+                mental: '星曜好心态积极，会调节；星曜差容易焦虑抑郁。',
+                attitude: '星曜好乐观，星曜差悲观。',
+                good: '福德宫星曜强的人，福气多，会享受，心态好，生活品质高。',
+                bad: '福德宫星曜弱的人，福少辛苦，压力大，需要调节情绪。'
+            },
+            '父母宫': {
+                base: '父母宫代表与父母的关系、长辈和学业。',
+                parentRelation: '星曜好与父母感情深，受疼爱；星曜差与父母缘浅。',
+                education: '星曜好学历高，受老师喜欢；星曜差学历低。',
+                support: '星曜好能得到父母经济支持，星曜差要独立奋斗。',
+                document: '星曜好学业顺，文书能力强；星曜差学业受阻。',
+                good: '父母宫星曜强的人，与父母感情好，受长辈支持，学历高。',
+                bad: '父母宫星曜弱的人，与父母缘浅，学历低，凡事靠自己。'
+            }
+        };
+
+        const STAR_IN_PALACE = {
+            '紫微星': {
+                '命宫': '紫微星坐命宫，性格稳重，有领导欲，爱面子，适合当领导。',
+                '兄弟宫': '紫微星入兄弟宫，兄弟姐妹中有地位高的人，能帮到你。',
+                '夫妻宫': '紫微星入夫妻宫，配偶条件好，婚姻稳定，要多沟通。',
+                '子女宫': '紫微星入子女宫，子女有出息，但沟通可能少。',
+                '财帛宫': '紫微星入财帛宫，财运好，适合投资理财。',
+                '疾厄宫': '紫微星入疾厄宫，要注意脾胃健康。',
+                '迁移宫': '紫微星入迁移宫，外出发展好，能遇贵人。',
+                '仆役宫': '紫微星入仆役宫，身边有能力强的朋友帮忙。',
+                '官禄宫': '紫微星入官禄宫，事业心强，升官快。',
+                '田宅宫': '紫微星入田宅宫，房产运好，能继承家业。',
+                '福德宫': '紫微星入福德宫，福气多，寿命长，能享福。',
+                '父母宫': '紫微星入父母宫，与父母感情好，能得到父母帮助。'
+            },
+            '天机星': {
+                '命宫': '天机星坐命宫，聪明机智，爱思考，适合做策划工作。',
+                '兄弟宫': '天机星入兄弟宫，兄弟姐妹中有搞技术的，能互相帮助。',
+                '夫妻宫': '天机星入夫妻宫，配偶聪明有才华，需要精神交流。',
+                '子女宫': '天机星入子女宫，子女聪明好学，有创造力。',
+                '财帛宫': '天机星入财帛宫，靠智慧赚钱，适合技术或艺术工作。',
+                '疾厄宫': '天机星入疾厄宫，要注意肝胆健康。',
+                '迁移宫': '天机星入迁移宫，外出顺利，能学到新知识。',
+                '仆役宫': '天机星入仆役宫，身边多聪明的朋友。',
+                '官禄宫': '天机星入官禄宫，适合策划、研究、教育工作。',
+                '田宅宫': '天机星入田宅宫，家里有聪明人。',
+                '福德宫': '天机星入福德宫，思维活跃，精神生活丰富。',
+                '父母宫': '天机星入父母宫，与父母有思想交流，学业上能得到帮助。'
+            },
+            '太阳星': {
+                '命宫': '太阳星坐命宫，热情大方，正直，有责任心，适合公众工作。',
+                '兄弟宫': '太阳星入兄弟宫，兄弟姐妹中有热心人，能互相照顾。',
+                '夫妻宫': '太阳星入夫妻宫，配偶热情开朗，要注意别让对方太操劳。',
+                '子女宫': '太阳星入子女宫，子女活泼外向，爱表现。',
+                '财帛宫': '太阳星入财帛宫，靠名声赚钱。',
+                '疾厄宫': '太阳星入疾厄宫，要注意心血管和眼睛健康。',
+                '迁移宫': '太阳星入迁移宫，外出发展顺利，能获得荣誉。',
+                '仆役宫': '太阳星入仆役宫，身边多热心助人的朋友。',
+                '官禄宫': '太阳星入官禄宫，适合公关、法律等行业。',
+                '田宅宫': '太阳星入田宅宫，家庭环境明亮温暖。',
+                '福德宫': '太阳星入福德宫，乐观开朗，人缘好，福气足。',
+                '父母宫': '太阳星入父母宫，与父亲关系好，父亲有地位。'
+            },
+            '武曲星': {
+                '命宫': '武曲星坐命宫，刚强果断，踏实，会赚钱，有商业头脑。',
+                '兄弟宫': '武曲星入兄弟宫，兄弟姐妹中有搞金融或财务的。',
+                '夫妻宫': '武曲星入夫妻宫，配偶务实稳重，要注意浪漫。',
+                '子女宫': '武曲星入子女宫，子女有毅力，适合体育或武职。',
+                '财帛宫': '武曲星入财帛宫，财运极佳，适合创业或投资。',
+                '疾厄宫': '武曲星入疾厄宫，要注意呼吸和骨骼健康。',
+                '迁移宫': '武曲星入迁移宫，外出靠实力发展，能赚钱。',
+                '仆役宫': '武曲星入仆役宫，身边多务实可靠的朋友。',
+                '官禄宫': '武曲星入官禄宫，适合创业、商业、金融工作。',
+                '田宅宫': '武曲星入田宅宫，房产运好，能积累不动产。',
+                '福德宫': '武曲星入福德宫，靠努力享福，会享受。',
+                '父母宫': '武曲星入父母宫，与父母分开早，独立生活。'
+            },
+            '天同星': {
+                '命宫': '天同星坐命宫，温和善良，乐观，爱享受，人缘好，不喜欢竞争。',
+                '兄弟宫': '天同星入兄弟宫，兄弟姐妹感情好，互相帮助。',
+                '夫妻宫': '天同星入夫妻宫，婚姻幸福，配偶温柔体贴。',
+                '子女宫': '天同星入子女宫，子女乖巧可爱，关系好。',
+                '财帛宫': '天同星入财帛宫，财运平稳，要注意存钱。',
+                '疾厄宫': '天同星入疾厄宫，要注意泌尿和消化健康。',
+                '迁移宫': '天同星入迁移宫，外出顺利，旅游开心。',
+                '仆役宫': '天同星入仆役宫，身边多温和善良的朋友。',
+                '官禄宫': '天同星入官禄宫，适合服务、教育等工作，不适合高压环境。',
+                '田宅宫': '天同星入田宅宫，家庭温馨舒适。',
+                '福德宫': '天同星入福德宫，福气最旺，最会享受生活。',
+                '父母宫': '天同星入父母宫，与父母感情好，受宠爱。'
+            },
+            '廉贞星': {
+                '命宫': '廉贞星坐命宫，感情丰富，爱恨分明，爱自由，有艺术气质。',
+                '兄弟宫': '廉贞星入兄弟宫，兄弟姐妹感情深但关系复杂。',
+                '夫妻宫': '廉贞星入夫妻宫，感情浓烈，要注意专一。',
+                '子女宫': '廉贞星入子女宫，子女有艺术天赋，感情丰富。',
+                '财帛宫': '廉贞星入财帛宫，财运与感情相关，钱来得快去得也快。',
+                '疾厄宫': '廉贞星入疾厄宫，要注意心脏健康。',
+                '迁移宫': '廉贞星入迁移宫，外出易有桃花运，适合艺术工作。',
+                '仆役宫': '廉贞星入仆役宫，身边多有艺术气质的朋友。',
+                '官禄宫': '廉贞星入官禄宫，适合艺术、娱乐、公关工作。',
+                '田宅宫': '廉贞星入田宅宫，家庭感情色彩浓厚。',
+                '福德宫': '廉贞星入福德宫，精神生活丰富，但容易多愁善感。',
+                '父母宫': '廉贞星入父母宫，与父母缘分特别，可能有遗传联系。'
+            }
+        };
+
+        const HUA_IN_PALACE = {
+            '化禄': {
+                '命宫': '化禄入命宫，财运好，生活丰富，运气顺，能逢凶化吉。',
+                '兄弟宫': '化禄入兄弟宫，兄弟姐妹财运好，能帮你，人际关系和谐。',
+                '夫妻宫': '化禄入夫妻宫，婚姻甜蜜，配偶财运好，感情稳定。',
+                '子女宫': '化禄入子女宫，子女缘分好，财运佳，桃花运旺。',
+                '财帛宫': '化禄入财帛宫，财运旺，财源广，会理财。',
+                '疾厄宫': '化禄入疾厄宫，身体好，但别太享受过度。',
+                '迁移宫': '化禄入迁移宫，外出顺利，能赚钱得名声。',
+                '仆役宫': '化禄入仆役宫，有得力助手，贵人多。',
+                '官禄宫': '化禄入官禄宫，事业顺，容易升官，财运事业一起好。',
+                '田宅宫': '化禄入田宅宫，房产运好，能买好房子。',
+                '福德宫': '化禄入福德宫，福气多，会享受，精神物质都好。',
+                '父母宫': '化禄入父母宫，与父母感情好，能得到父母帮助。'
+            },
+            '化权': {
+                '命宫': '化权入命宫，意志强，有领导能力，事业心想强。',
+                '兄弟宫': '化权入兄弟宫，兄弟姐妹中有当领导的，能互相帮助。',
+                '夫妻宫': '化权入夫妻宫，配偶有领导能力，要注意别争话语权。',
+                '子女宫': '化权入子女宫，子女有领导才能，有创造力。',
+                '财帛宫': '化权入财帛宫，靠权力赚钱。',
+                '疾厄宫': '化权入疾厄宫，身体抵抗力强，但别太固执。',
+                '迁移宫': '化权入迁移宫，外出能获得权力和地位。',
+                '仆役宫': '化权入仆役宫，下属有权力欲，要好好管理。',
+                '官禄宫': '化权入官禄宫，有领导才能，升官快，适合当管理。',
+                '田宅宫': '化权入田宅宫，对房子有占有欲。',
+                '福德宫': '化权入福德宫，有主见，精神力量强。',
+                '父母宫': '化权入父母宫，可能与父母有权力之争。'
+            },
+            '化科': {
+                '命宫': '化科入命宫，聪明好学，名声好，有才华。',
+                '兄弟宫': '化科入兄弟宫，兄弟姐妹中有学习好的，能帮你学习。',
+                '夫妻宫': '化科入夫妻宫，配偶聪明有才华，婚姻有文化品位。',
+                '子女宫': '化科入子女宫，子女学习好，有创造力，名声佳。',
+                '财帛宫': '化科入财帛宫，靠知识赚钱，适合知识付费。',
+                '疾厄宫': '化科入疾厄宫，身体好，能得到好的医疗。',
+                '迁移宫': '化科入迁移宫，外出能获得学术荣誉或名声。',
+                '仆役宫': '化科入仆役宫，身边多有文化的朋友。',
+                '官禄宫': '化科入官禄宫，学习顺，适合学术、教育工作。',
+                '田宅宫': '化科入田宅宫，家庭有文化氛围，有书卷气。',
+                '福德宫': '化科入福德宫，精神生活丰富，有文化修养。',
+                '父母宫': '化科入父母宫，学历高，能得到父母学业支持。'
+            },
+            '化忌': {
+                '命宫': '化忌入命宫，命运多波折，是非多，要谨慎，但也是磨练机会。',
+                '兄弟宫': '化忌入兄弟宫，兄弟姐妹关系淡，可能有财务纠纷。',
+                '夫妻宫': '化忌入夫妻宫，婚姻多波折，可能晚婚或离婚，要用心经营。',
+                '子女宫': '化忌入子女宫，子女缘分薄，桃花纠纷多，要多管孩子。',
+                '财帛宫': '化忌入财帛宫，财运差，财来财去，别投资，要守财。',
+                '疾厄宫': '化忌入疾厄宫，要注意健康，容易有慢性病。',
+                '迁移宫': '化忌入迁移宫，外出不顺利，少远行。',
+                '仆役宫': '化忌入仆役宫，身边多小人，易被算计。',
+                '官禄宫': '化忌入官禄宫，事业多阻碍，学业受阻。',
+                '田宅宫': '化忌入田宅宫，房产运差，家庭关系不稳定。',
+                '福德宫': '化忌入福德宫，压力大，福少，要注意心理。',
+                '父母宫': '化忌入父母宫，与父母缘浅，学历受阻。'
+            }
+        };
+
+        const HUA_INTERPRETATION = {
+            '化禄': {
+                nature: '化禄代表财富、事业、感情方面的好运和收获。',
+                good: '化禄入好宫位，财运好，事业成功，感情甜蜜。',
+                bad: '化禄入弱宫位，容易贪心，财来财去。'
+            },
+            '化权': {
+                nature: '化权代表权力、事业、意志力方面的增强。',
+                good: '化权入好宫位，事业心强，有领导能力，意志坚定。',
+                bad: '化权入弱宫位，容易固执，权力欲太强。'
+            },
+            '化科': {
+                nature: '化科代表学业、声誉、智慧方面的提升。',
+                good: '化科入好宫位，聪明好学，名声好，有才华。',
+                bad: '化科入弱宫位，可能虚有其表，学业受阻。'
+            },
+            '化忌': {
+                nature: '化忌代表是非、阻碍、执着方面的困扰。',
+                good: '化忌入好宫位，虽然有波折但能克服，磨练心志。',
+                bad: '化忌入弱宫位，是非多，阻碍大，财运差。'
+            }
+        };
+
+        const WUXING_NATURE = {
+            '木': '木性人仁慈善良，有正义感，重视情义，但有时过于固执。',
+            '火': '火性人热情开朗，积极主动，富有活力，但有时冲动急躁。',
+            '土': '土性人稳重厚道，诚实守信，勤劳踏实，但有时固执保守。',
+            '金': '金性人刚毅果断，义气十足，注重原则，但有时过于刚硬。',
+            '水': '水性人聪明灵活，反应敏捷，适应力强，但有时善变无常。'
+        };
+
+        function getGanZhi(year, month, day, hour) {
+            const baseYear = 1984;
+            const baseGanZhiIndex = 0;
+
+            // 计算年柱
+            const yearDiff = year - baseYear;
+            let yearGanIndex = (baseGanZhiIndex + yearDiff) % 10;
+            let yearZhiIndex = (baseGanZhiIndex + yearDiff) % 12;
+            if (yearGanIndex < 0) yearGanIndex += 10;
+            if (yearZhiIndex < 0) yearZhiIndex += 12;
+
+            // 计算月柱（简化算法，实际需要考虑节气）
+            const monthBase = [0, 3, 3, 6, 9, 11, 14, 16, 19, 22, 24, 27];
+            let monthGanIndex = (yearGanIndex * 2 + monthBase[month - 1]) % 10;
+            let monthZhiIndex = (month - 1) % 12;
+            if (monthGanIndex < 0) monthGanIndex += 10;
+
+            // 计算日柱
+            const totalDays = Math.floor((new Date(year, month - 1, day) - new Date(1900, 0, 1)) / 86400000);
+            const dayGanIndex = (totalDays + 1) % 10;
+            const dayZhiIndex = (totalDays + 1) % 12;
+
+            // 计算时柱
+            const hourZhiIndex = hour % 12;
+            const hourGanIndex = (dayGanIndex * 2 + hourZhiIndex) % 10;
+
+            return {
+                year: TIANGAN[yearGanIndex] + DIZHI[yearZhiIndex],
+                month: TIANGAN[monthGanIndex] + DIZHI[monthZhiIndex],
+                day: TIANGAN[dayGanIndex] + DIZHI[dayZhiIndex],
+                hour: TIANGAN[hourGanIndex] + DIZHI[hourZhiIndex]
+            };
+        }
+
+        function getWuXing(gz) {
+            const wuxing = { '木': 0, '火': 0, '土': 0, '金': 0, '水': 0 };
+            const wuxingCycle = {
+                '甲': '木', '乙': '木', '丙': '火', '丁': '火', '戊': '土',
+                '己': '土', '庚': '金', '辛': '金', '壬': '水', '癸': '水'
+            };
+
+            for (let char of gz) {
+                if (wuxingCycle[char]) {
+                    wuxing[wuxingCycle[char]]++;
+                }
+            }
+
+            let dominant = '木';
+            let maxCount = 0;
+            for (let key in wuxing) {
+                if (wuxing[key] > maxCount) {
+                    maxCount = wuxing[key];
+                    dominant = key;
+                }
+            }
+
+            return { wuxing, dominant };
+        }
+
+        function calculateSiHua(year, month, day, gender) {
+            const yearLastDigit = year % 10;
+            const dayLastDigit = day % 10;
+
+            const luLocation = SI_HUA.location[yearLastDigit];
+            const quanLocation = (luLocation + 1) % 12;
+            const keLocation = (luLocation + 2) % 12;
+            const jiLocation = (luLocation + 3) % 12;
+
+            const genderOffset = gender === 'male' ? 1 : -1;
+
+            return {
+                '化禄': (luLocation * genderOffset + 12) % 12,
+                '化权': (quanLocation * genderOffset + 12) % 12,
+                '化科': (keLocation * genderOffset + 12) % 12,
+                '化忌': (jiLocation * genderOffset + 12) % 12
+            };
+        }
+
+        function assignPalaces(year, month, day, hour, gender) {
+            const ganZhi = getGanZhi(year, month, day, hour);
+            const wuxing = getWuXing(ganZhi.year + ganZhi.month + ganZhi.day + ganZhi.hour);
+            const siHua = calculateSiHua(year, month, day, gender);
+
+            const mainStars = ZIWEI_STARS.main;
+            const assistantStars = ZIWEI_STARS.assistant;
+
+            // 基于多个因素计算基础值
+            const yearBase = year % 12;
+            const monthBase = month % 12;
+            const dayBase = day % 12;
+            const hourBase = hour % 12;
+            const genderFactor = gender === 'male' ? 1 : 5;
+            
+            // 计算综合基础值
+            const baseValue = (yearBase * 1000 + monthBase * 100 + dayBase * 10 + hourBase + genderFactor) % 12;
+
+            const starAssignments = [];
+            for (let i = 0; i < 12; i++) {
+                starAssignments.push({
+                    palace: PALACE_NAMES[i],
+                    mainStar: null,
+                    assistantStars: [],
+                    maleficStars: [],
+                    siHua: [],
+                    ganZhi: ganZhi.year + ganZhi.month + ganZhi.day + ganZhi.hour
+                });
+            }
+
+            // 分配主星
+            mainStars.forEach((star, idx) => {
+                const location = (baseValue + idx * 3) % 12;
+                starAssignments[location].mainStar = star;
+            });
+
+            // 分配辅星
+            assistantStars.forEach((star, idx) => {
+                const location = (baseValue + idx * 2 + 1) % 12;
+                starAssignments[location].assistantStars.push(star);
+            });
+
+            // 分配煞星
+            ZIWEI_STARS.malefic.forEach((star, idx) => {
+                const location = (baseValue + idx * 4 + 3) % 12;
+                starAssignments[location].maleficStars.push(star);
+            });
+
+            // 分配四化星
+            for (let hua in siHua) {
+                starAssignments[siHua[hua]].siHua.push(hua);
+            }
+
+            return {
+                ganZhi,
+                wuxing,
+                siHua,
+                palaces: starAssignments
+            };
+        }
+
+        function getPalaceAnalysis(palace, starInfo) {
+            let analysis = '';
+            const palaceInfo = PALACE_ANALYSIS[palace] || { base: '', good: '', bad: '' };
+            
+            analysis += `<div style="background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,140,0,0.05) 100%); padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #ffd700;">
+                <div style="color: #ffd700; font-size: 16px; margin-bottom: 8px; font-weight: bold;">📜 宫位概述</div>
+                <div style="color: #ccc; line-height: 1.8;">${palaceInfo.base}</div>
+            </div>`;
+            
+            const hasMainStar = starInfo.mainStar;
+            const hasMalefic = starInfo.maleficStars && starInfo.maleficStars.length > 0;
+            const hasGoodHua = starInfo.siHua && starInfo.siHua.some(h => h === '化禄' || h === '化权' || h === '化科');
+            const hasBadHua = starInfo.siHua && starInfo.siHua.includes('化忌');
+
+            if (hasMainStar) {
+                const starProp = STAR_PROPERTIES[starInfo.mainStar] || {};
+                const starInPalace = STAR_IN_PALACE[starInfo.mainStar] || {};
+                const specificAnalysis = starInPalace[palace] || '';
+                
+                analysis += `<div style="background: rgba(255,215,0,0.1); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+                    <div style="color: #ffd700; font-size: 16px; margin-bottom: 10px;">
+                        <span style="font-size: 20px;">⭐</span> <strong>主星：${starInfo.mainStar}</strong>
+                        <span style="color: #87ceeb; font-size: 14px; margin-left: 10px;">（${starProp.element}性 | ${starProp.nature}）</span>
+                    </div>
+                    <div style="color: #aaa; line-height: 1.8; margin-bottom: 8px;">${starProp.interpretation || ''}</div>
+                    ${specificAnalysis ? `<div style="color: #90EE90; line-height: 1.8; padding: 10px; background: rgba(144,238,144,0.1); border-radius: 8px; margin-top: 10px;">
+                        <span style="color: #90EE90;">✦ 特论：</span>${specificAnalysis}
+                    </div>` : ''}
+                </div>`;
+            }
+
+            if (starInfo.assistantStars && starInfo.assistantStars.length > 0) {
+                const assistants = starInfo.assistantStars.map(s => {
+                    const prop = STAR_PROPERTIES[s] || {};
+                    return `<span style="color: #87ceeb;">${s}</span><span style="color: #888; font-size: 12px;">(${prop.nature || ''})</span>`;
+                }).join('<span style="color: #555; margin: 0 8px;">|</span>');
+                analysis += `<div style="background: rgba(135,206,235,0.1); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
+                    <div style="color: #87ceeb; font-size: 14px; margin-bottom: 8px;"><span style="font-size: 16px;">👥</span> <strong>辅星组合</strong></div>
+                    <div style="color: #ccc; line-height: 1.8;">${assistants}</div>
+                </div>`;
+            }
+
+            if (hasMalefic) {
+                const malefics = starInfo.maleficStars.map(s => {
+                    const prop = STAR_PROPERTIES[s] || {};
+                    return `<span style="color: #ff6b6b;">${s}</span><span style="color: #888; font-size: 12px;">(${prop.nature || ''})</span>`;
+                }).join('<span style="color: #555; margin: 0 8px;">|</span>');
+                analysis += `<div style="background: rgba(255,107,107,0.1); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
+                    <div style="color: #ff6b6b; font-size: 14px; margin-bottom: 8px;"><span style="font-size: 16px;">⚠️</span> <strong>煞星组合</strong></div>
+                    <div style="color: #ccc; line-height: 1.8;">${malefics}</div>
+                    <div style="color: #ff9800; font-size: 12px; margin-top: 8px;">💡 煞星汇聚需注意，此宫位易有波折</div>
+                </div>`;
+            }
+
+            if (starInfo.siHua && starInfo.siHua.length > 0) {
+                analysis += `<div style="background: rgba(255,152,0,0.1); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+                    <div style="color: #ff9800; font-size: 14px; margin-bottom: 12px;"><span style="font-size: 16px;">🔮</span> <strong>四化星详解</strong></div>`;
+                starInfo.siHua.forEach(h => {
+                    const huaInfo = HUA_INTERPRETATION[h] || { nature: '', good: '', bad: '' };
+                    const huaInPalace = HUA_IN_PALACE[h] || {};
+                    const specificHua = huaInPalace[palace] || '';
+                    const isGood = (h === '化禄' || h === '化权' || h === '化科');
+                    const huaColor = h === '化忌' ? '#ff6b6b' : (isGood ? '#4caf50' : '#ff9800');
+                    const huaIcon = h === '化忌' ? '⚠️' : (h === '化禄' ? '💰' : (h === '化权' ? '👑' : '📚'));
+                    
+                    analysis += `<div style="margin: 10px 0; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; border-left: 3px solid ${huaColor};">
+                        <div style="color: ${huaColor}; font-size: 15px; margin-bottom: 6px;">
+                            ${huaIcon} <strong>${h}</strong>
+                        </div>
+                        <div style="color: #aaa; font-size: 13px; line-height: 1.7;">${huaInfo.nature}</div>
+                        <div style="color: ${huaColor === '#ff6b6b' ? '#ff6b6b' : '#90EE90'}; font-size: 13px; margin-top: 6px; line-height: 1.7;">
+                            ${isGood ? huaInfo.good : huaInfo.bad}
+                        </div>
+                        ${specificHua ? `<div style="color: #ffd700; font-size: 13px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(255,215,0,0.3);">
+                            ✦ 此宫论断：${specificHua}
+                        </div>` : ''}
+                    </div>`;
+                });
+                analysis += `</div>`;
+            }
+
+            const totalStars = (hasMainStar ? 1 : 0) + 
+                              (starInfo.assistantStars ? starInfo.assistantStars.length : 0) + 
+                              (hasMalefic ? starInfo.maleficStars.length : 0);
+            
+            let strengthLevel = '';
+            let strengthColor = '';
+            let strengthIcon = '';
+            
+            if (totalStars >= 4) {
+                strengthLevel = '星曜旺盛';
+                strengthColor = '#4caf50';
+                strengthIcon = '🌟';
+            } else if (totalStars >= 2) {
+                strengthLevel = '星曜平稳';
+                strengthColor = '#ff9800';
+                strengthIcon = '⭐';
+            } else if (totalStars >= 1) {
+                strengthLevel = '星曜较弱';
+                strengthColor = '#ff6b6b';
+                strengthIcon = '☆';
+            } else {
+                strengthLevel = '星曜空虚';
+                strengthColor = '#888';
+                strengthIcon = '○';
+            }
+
+            analysis += `<div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; text-align: center;">
+                <div style="color: ${strengthColor}; font-size: 18px; margin-bottom: 5px;">
+                    ${strengthIcon} <strong>${strengthLevel}</strong>
+                </div>
+                <div style="color: #888; font-size: 13px;">`;
+            
+            if (totalStars >= 3) {
+                analysis += `此宫星曜旺盛，运势较佳，逢凶化吉之力较强`;
+            } else if (totalStars === 0) {
+                analysis += `此宫星曜空虚，宜后天补足，可通过风水、饰品调节`;
+            } else {
+                analysis += `此宫星曜一般，需要用心经营，顺势而为`;
+            }
+            
+            analysis += `</div></div>`;
+
+            if (hasGoodHua && hasBadHua) {
+                analysis += `<div style="background: linear-gradient(135deg, rgba(76,175,80,0.1) 0%, rgba(255,107,107,0.1) 100%); padding: 12px; border-radius: 10px; margin-top: 15px; text-align: center;">
+                    <div style="color: #ff9800; font-size: 13px;">⚡ 吉凶并存，此宫运势波动较大，需要辩证看待</div>
+                </div>`;
+            }
+
+            return analysis || '此宫位暂无主要星曜';
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (tab === 'yijing') {
+                document.getElementById('yijing-section').style.display = 'block';
+                document.getElementById('ziwei-section').style.display = 'none';
+            } else {
+                document.getElementById('yijing-section').style.display = 'none';
+                document.getElementById('ziwei-section').style.display = 'block';
+            }
+        }
+
+        function calculateZiwei() {
+            const name = document.getElementById('name').value.trim();
+            const year = parseInt(document.getElementById('birthYear').value);
+            const month = parseInt(document.getElementById('birthMonth').value);
+            const day = parseInt(document.getElementById('birthDay').value);
+            const hour = parseInt(document.getElementById('birthHour').value);
+            const gender = document.getElementById('gender').value;
+
+            if (!year || !month || !day) {
+                alert('请输入完整的出生日期');
+                return;
+            }
+
+            const result = assignPalaces(year, month, day, hour, gender);
+
+            document.getElementById('ziweiTitle').textContent = name ? `${name}的紫微斗数命盘` : '紫微斗数命盘';
+            document.getElementById('ziweiInfo').textContent =
+                (name ? `姓名：${name} | ` : '') +
+                `出生日期：${year}年${month}月${day}日${DIZHI[hour]}时 | ` +
+                `性别：${gender === 'male' ? '男' : '女'} | ` +
+                `八字：${result.ganZhi.year}年 ${result.ganZhi.month}月 ${result.ganZhi.day}日 ${result.ganZhi.hour}时 | ` +
+                `五行：${result.wuxing.dominant}旺`;
+
+            const palaceGrid = document.getElementById('palaceGrid');
+            palaceGrid.innerHTML = result.palaces.map((p, idx) => `
+                <div class="palace-card">
+                    <div class="palace-name">${p.palace}</div>
+                    <div class="palace-stars">
+                        ${p.mainStar ? `<span class="star" style="color: #ffd700;">${p.mainStar}</span>` : ''}
+                        ${p.assistantStars.map(s => `<span class="star zhang">${s}</span>`).join('')}
+                        ${p.maleficStars.map(s => `<span class="star" style="color: #888;">${s}</span>`).join('')}
+                        ${p.siHua.map(h => `<span class="star hua">${h}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            const starsList = document.getElementById('starsList');
+            const allStars = {};
+            result.palaces.forEach((p, idx) => {
+                if (p.mainStar) {
+                    allStars[p.mainStar] = p.palace;
+                }
+                p.assistantStars.forEach(s => {
+                    allStars[s] = p.palace;
+                });
+            });
+
+            starsList.innerHTML = Object.entries(allStars).slice(0, 12).map(([star, location]) => `
+                <div class="star-item">
+                    <div class="star-name">${star}</div>
+                    <div class="star-location">${location}</div>
+                </div>
+            `).join('');
+
+            const analysis = result.palaces.map((p, idx) => `
+                <div class="item">
+                    <h4>${p.palace}</h4>
+                    <p>${getPalaceAnalysis(p.palace, result.palaces[idx])}</p>
+                </div>
+            `).join('');
+
+            document.getElementById('ziweiAnalysis').innerHTML = analysis;
+            document.getElementById('ziweiResult').style.display = 'block';
+        }
+
+        function init() {
+            loadHistory();
+        }
+
+        function getScoreClass(score) {
+            if (score >= 80) return 'score-high';
+            if (score >= 60) return 'score-medium';
+            return 'score-low';
+        }
+
+        function hashCode(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash);
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                generateHexagram();
+            }
+        }
+
+        function generateHexagram() {
+            const input = document.getElementById('divinationInput');
+            const userInput = input.value.trim();
+
+            if (!userInput) {
+                input.style.borderColor = '#ff6b6b';
+                input.focus();
+                setTimeout(() => {
+                    input.style.borderColor = 'rgba(255, 215, 0, 0.3)';
+                }, 1000);
+                return;
+            }
+
+            const loading = document.getElementById('loading');
+            loading.classList.add('show');
+
+            setTimeout(() => {
+                const hash = hashCode(userInput);
+                const index = hash % hexagrams.length;
+                const hexagram = hexagrams[index];
+
+                const lines = hexagram.symbol.split('\n');
+                const symbolHtml = lines.map(line => {
+                    const isYang = line.includes('━') && !line.includes(' ');
+                    const className = isYang ? 'yang' : 'yin';
+                    return `<span class="${className}">${line}</span>`;
+                }).join('<br>');
+                document.getElementById('hexagramSymbol').innerHTML = symbolHtml;
+                document.getElementById('hexagramName').textContent = hexagram.name;
+                document.getElementById('hexagramText').textContent = hexagram.text;
+
+                document.getElementById('fortuneScore').textContent = hexagram.fortune.score;
+                document.getElementById('fortuneScore').className = 'score ' + getScoreClass(hexagram.fortune.score);
+                document.getElementById('fortuneText').innerHTML = hexagram.fortune.text + 
+                    (hexagram.fortune.score < 70 ? `<br><span style="color: #ff9800; font-size: 14px; margin-top: 8px; display: inline-block;">💡 建议：${hexagram.fortune.solution}</span>` : '');
+
+                document.getElementById('wealthScore').textContent = hexagram.wealth.score;
+                document.getElementById('wealthScore').className = 'score ' + getScoreClass(hexagram.wealth.score);
+                document.getElementById('wealthText').innerHTML = hexagram.wealth.text + 
+                    (hexagram.wealth.score < 70 ? `<br><span style="color: #ff9800; font-size: 14px; margin-top: 8px; display: inline-block;">💡 建议：${hexagram.wealth.solution}</span>` : '');
+
+                document.getElementById('loveScore').textContent = hexagram.love.score;
+                document.getElementById('loveScore').className = 'score ' + getScoreClass(hexagram.love.score);
+                document.getElementById('loveText').innerHTML = hexagram.love.text + 
+                    (hexagram.love.score < 70 ? `<br><span style="color: #ff9800; font-size: 14px; margin-top: 8px; display: inline-block;">💡 建议：${hexagram.love.solution}</span>` : '');
+
+                document.getElementById('interpretation').innerHTML = `
+                    <h3>✧ 卦象详解 ✧</h3>
+                    <p>${hexagram.interpretation}</p>
+                `;
+
+                saveToHistory(userInput, hexagram);
+                loading.classList.remove('show');
+            }, 1000);
+        }
+
+        function saveToHistory(userInput, hexagram) {
+            const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const record = {
+                id: Date.now(),
+                time: new Date().toLocaleString(),
+                question: userInput,
+                name: hexagram.name,
+                text: hexagram.text,
+                interpretation: hexagram.interpretation,
+                fortune: hexagram.fortune,
+                wealth: hexagram.wealth,
+                love: hexagram.love
+            };
+            history.unshift(record);
+            if (history.length > 20) {
+                history.pop();
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+            loadHistory();
+        }
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const historyList = document.getElementById('historyList');
+
+            if (history.length === 0) {
+                historyList.innerHTML = '<p style="color: #888; text-align: center;">暂无历史记录</p>';
+                return;
+            }
+
+            historyList.innerHTML = history.map(record => `
+                <div class="history-item">
+                    <small>${record.time}</small>
+                    <div style="color: #aaa; font-size: 14px; margin: 5px 0;">问：${record.question}</div>
+                    <div class="history-name">${record.name}</div>
+                    <p style="color: #ccc; margin: 5px 0;">${record.text}</p>
+                    <div class="history-analysis">
+                        <div>
+                            <span style="color: #ffd700;">时运</span>:
+                            <span class="${getScoreClass(record.fortune.score)}">${record.fortune.score}分</span>
+                        </div>
+                        <div>
+                            <span style="color: #ffd700;">财运</span>:
+                            <span class="${getScoreClass(record.wealth.score)}">${record.wealth.score}分</span>
+                        </div>
+                        <div>
+                            <span style="color: #ffd700;">姻缘</span>:
+                            <span class="${getScoreClass(record.love.score)}">${record.love.score}分</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearHistory() {
+            if (confirm('确定要清空历史记录吗？')) {
+                localStorage.removeItem(STORAGE_KEY);
+                loadHistory();
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
